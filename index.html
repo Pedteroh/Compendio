@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Compêndio de Animais</title>
+<style>
+/* ==========================================================
+   Compêndio de Animais — estilos
+   Paleta: verdes, bege e neutros. Tema claro/escuro por variáveis.
+   ========================================================== */
+:root{
+  --bg:#f1ecdf; --surface:#f8f4e9; --card:#fffdf8; --ink:#1d2a21; --muted:#5b695f;
+  --primary:#2c5a3a; --primary-2:#3f7a50; --primary-ink:#ffffff; --primary-soft:#e0ebd8;
+  --accent:#98722f; --line:#dcd3bb; --danger:#a63a2e; --danger-soft:#f6dedb;
+  --warn-bg:#fbefcf; --warn-ink:#654a0f; --ok-bg:#dfeeda; --ok-ink:#234d2d;
+  --shadow:0 1px 2px rgba(29,42,33,.06),0 6px 18px rgba(29,42,33,.08);
+  --radius:14px; --focus:#2f6fbf;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+:root[data-theme="dark"]{
+  --bg:#101812; --surface:#16211a; --card:#1b281f; --ink:#e9ecde; --muted:#a2b2a5;
+  --primary:#7dba8a; --primary-2:#5f9e6d; --primary-ink:#0f1a12; --primary-soft:#243629;
+  --accent:#d1a85a; --line:#2c3e31; --danger:#e08577; --danger-soft:#3b2220;
+  --warn-bg:#3a3014; --warn-ink:#f0d890; --ok-bg:#1f3524; --ok-ink:#b7e0bf;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35); --focus:#8ab8f0;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;font-size:16px;padding-bottom:84px}
+h1,h2,h3,h4{font-family:var(--serif);line-height:1.2;margin:0 0 .4em;font-weight:700}
+h1{font-size:1.9rem} h2{font-size:1.4rem} h3{font-size:1.1rem}
+p{margin:0 0 .7em}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--primary);color:var(--primary-ink);padding:8px 12px;z-index:100}
+.skip:focus{left:8px;top:8px}
+.wrap{max-width:1120px;margin:0 auto;padding:16px}
+.muted{color:var(--muted)} .small{font-size:.88rem} .sci{font-style:italic;color:var(--muted)}
+.hint{font-size:.88rem;color:var(--muted);margin:.3em 0 0}
+
+/* Cabeçalho e navegação */
+.topbar{position:sticky;top:0;z-index:30;background:var(--primary);color:var(--primary-ink);box-shadow:var(--shadow)}
+:root[data-theme="dark"] .topbar{background:#1d3324;color:#e9ecde}
+.topbar-in{max-width:1120px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;min-width:0}
+.brand svg{width:34px;height:34px;flex:none}
+.brand b{font-family:var(--serif);font-size:1.15rem;display:block;line-height:1.1}
+.brand small{display:block;opacity:.8;font-size:.72rem}
+.nav{margin-left:auto;display:flex;gap:4px}
+.nav a{color:inherit;text-decoration:none;padding:8px 12px;border-radius:999px;font-size:.95rem}
+.nav a[aria-current="page"]{background:rgba(255,255,255,.2);font-weight:600}
+.icon-btn{background:rgba(255,255,255,.15);color:inherit;border:0;border-radius:999px;width:40px;height:40px;font-size:1.1rem;cursor:pointer}
+.icon-btn:hover{background:rgba(255,255,255,.28)}
+@media (max-width:720px){
+  .brand small{display:none}
+  .nav{position:fixed;left:0;right:0;bottom:0;margin:0;justify-content:space-around;background:var(--primary);padding:8px 8px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.2);gap:0}
+  :root[data-theme="dark"] .nav{background:#1d3324}
+  .nav a{flex:1;text-align:center;padding:10px 6px}
+  .icon-btn{margin-left:auto}
+}
+
+/* Botões e formulários */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 16px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;min-height:44px}
+.btn:hover{border-color:var(--primary)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.btn.primary:hover{background:var(--primary-2)}
+.btn.danger{background:var(--danger-soft);border-color:var(--danger);color:var(--danger)}
+.btn.sm{padding:6px 12px;min-height:36px;font-size:.9rem}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.fav{background:none;border:0;font-size:1.4rem;cursor:pointer;color:var(--accent);padding:4px 8px;line-height:1}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row.end{justify-content:flex-end;margin-top:14px}
+.row.between{justify-content:space-between}
+label{display:block;font-weight:600;font-size:.92rem;margin-bottom:4px}
+input[type=text],input[type=search],input[type=date],select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px}
+textarea{min-height:90px;resize:vertical}
+input[type=checkbox],input[type=radio]{width:18px;height:18px;accent-color:var(--primary)}
+.field{margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 14px}
+.req{color:var(--danger)}
+.err-msg{color:var(--danger);font-size:.88rem;margin-top:4px}
+
+/* Cartões */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.card.flat{box-shadow:none}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 0 10px}
+.section-title h2{margin:0}
+.banner{border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;font-size:.95rem}
+.banner.warn{background:var(--warn-bg);color:var(--warn-ink)}
+.banner.ok{background:var(--ok-bg);color:var(--ok-ink)}
+.banner.err{background:var(--danger-soft);color:var(--danger)}
+.hero{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:var(--primary-ink);border-radius:var(--radius);padding:26px 22px;box-shadow:var(--shadow);margin-bottom:16px}
+:root[data-theme="dark"] .hero{background:linear-gradient(135deg,#1f3a27,#2a4a33);color:#e9ecde}
+.hero h1{margin-bottom:.2em}.hero p{opacity:.92;max-width:60ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+.stat b{display:block;font-family:var(--serif);font-size:1.7rem;color:var(--primary)}
+.stat span{font-size:.85rem;color:var(--muted)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0 0 14px}
+.steps li{counter-increment:s;padding:8px 0 8px 42px;position:relative}
+.steps li::before{content:counter(s);position:absolute;left:0;top:6px;width:30px;height:30px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:700}
+
+/* Barra de ferramentas do catálogo */
+.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:12px}
+.toolbar-2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+@media (max-width:720px){.toolbar{grid-template-columns:1fr}}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--card);color:var(--ink);padding:8px 14px;cursor:pointer;font:inherit;min-height:40px}
+.seg button[aria-pressed="true"]{background:var(--primary);color:var(--primary-ink)}
+.chk{display:inline-flex;align-items:center;gap:8px;margin:0;font-weight:500}
+
+/* Espécies: grade e lista */
+.sp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.sp{margin:0;padding:0;overflow:hidden;display:flex;flex-direction:column}
+.sp .cover{display:block;text-decoration:none;color:inherit}
+.pimg{position:relative;aspect-ratio:4/3;background:var(--primary-soft);overflow:hidden}
+.pimg img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:var(--primary-soft);color:var(--muted);text-align:center;padding:8px;font-size:.8rem}
+.ph span{font-size:1.8rem}
+.sp .body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.sp h3{margin:0;display:flex;justify-content:space-between;gap:6px;align-items:flex-start}
+.sp .actions{display:flex;gap:8px;margin-top:auto;padding-top:6px;flex-wrap:wrap;align-items:center}
+.badge{display:inline-block;background:var(--primary-soft);color:var(--primary);border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:700}
+.badge.alt{background:var(--warn-bg);color:var(--warn-ink)}
+.counts{font-size:.85rem;color:var(--muted);margin:0}
+.sp-list .sp{flex-direction:row;margin-bottom:12px}
+.sp-list .sp .cover{width:130px;flex:none}
+.sp-list .sp .pimg{height:100%;aspect-ratio:auto;min-height:110px}
+@media (max-width:480px){.sp-list .sp .cover{width:100px}}
+
+/* Ficha */
+.sheet-head{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:20px;align-items:start}
+@media (max-width:760px){.sheet-head{grid-template-columns:1fr}}
+.sheet-head .pimg{border-radius:var(--radius);box-shadow:var(--shadow)}
+dl.tax{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:10px 0}
+dl.tax dt{color:var(--muted);font-size:.9rem} dl.tax dd{margin:0}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.info-grid h3{color:var(--primary);font-size:1rem;margin-bottom:.2em}
+.pre{white-space:pre-wrap;word-wrap:break-word}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.gitem{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;padding:0;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.gitem .pimg{aspect-ratio:1/1}
+.gitem small{display:block;padding:6px 8px;color:var(--muted);min-height:1.9em}
+.cover-tag{position:absolute;top:6px;left:6px;background:var(--accent);color:#fff;font-size:.7rem;padding:2px 8px;border-radius:999px;font-weight:700}
+.obs{border-left:4px solid var(--primary-2)}
+.obs .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.obs .thumbs .gitem{width:84px}
+.obs .thumbs .pimg{aspect-ratio:1/1}
+
+/* Editor de fotografias nos formulários */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:12px}
+.pitem{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.pitem.removed{opacity:.45}
+.pitem figcaption{padding:8px;display:flex;flex-direction:column;gap:6px}
+.pitem input[type=text]{min-height:36px;padding:6px 8px;font-size:.88rem}
+.pitem .meta{font-size:.74rem;color:var(--muted);word-break:break-all}
+.pitem .newtag{position:absolute;top:6px;right:6px;background:var(--primary);color:var(--primary-ink);font-size:.7rem;padding:2px 8px;border-radius:999px}
+.dropzone{border:2px dashed var(--line);border-radius:12px;padding:14px;background:var(--surface)}
+
+/* Janelas e avisos */
+.backdrop{position:fixed;inset:0;background:rgba(10,18,12,.6);z-index:60;display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto}
+.modal{background:var(--card);color:var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;width:100%;max-width:480px;max-height:92vh;overflow:auto;border:1px solid var(--line)}
+.modal.wide{max-width:940px}
+.viewer-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px}
+@media (max-width:760px){.viewer-grid{grid-template-columns:1fr}}
+.viewer-img{background:#0b120d;border-radius:12px;display:flex;align-items:center;justify-content:center;min-height:240px;max-height:70vh;overflow:hidden}
+.viewer-img img{max-width:100%;max-height:70vh;object-fit:contain;display:block}
+.viewer-img .ph{background:transparent;color:#cfd8cf;min-height:240px}
+.toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;z-index:80;display:flex;flex-direction:column;gap:8px;width:min(92vw,460px);pointer-events:none}
+.toast{background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:12px;box-shadow:var(--shadow);font-size:.95rem;pointer-events:auto}
+.toast.err{background:var(--danger);color:#fff}
+.busy{position:fixed;inset:0;z-index:90;background:rgba(10,18,12,.65);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;gap:14px;text-align:center;padding:20px}
+.spin{width:44px;height:44px;border:5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:30px 16px;color:var(--muted)}
+.empty .big{font-size:2.6rem}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:3s}}
+
+/* ==========================================================
+   VIDRO LÍQUIDO (liquid glass)
+   Camada visual sobreposta: superfícies translúcidas com desfoque do fundo,
+   brilho especular nas bordas e um fundo vivo de manchas de cor.
+   Não altera nenhuma lógica do aplicativo.
+   ========================================================== */
+:root{
+  --g-bg:rgba(255,253,246,.50);       /* vidro comum */
+  --g-bg-strong:rgba(255,253,246,.80);/* janelas e áreas de leitura */
+  --g-tint:rgba(44,90,58,.14);        /* vidro com tom verde */
+  --g-line:rgba(255,255,255,.65);     /* borda iluminada */
+  --g-line-soft:rgba(255,255,255,.28);
+  --g-hi:rgba(255,255,255,.85);       /* brilho especular superior */
+  --g-lo:rgba(29,42,33,.10);          /* sombra interna inferior */
+  --g-shadow:0 8px 32px rgba(29,42,33,.16),0 2px 6px rgba(29,42,33,.08);
+  --g-blur:blur(18px) saturate(170%);
+  --g-input:rgba(255,255,255,.55);
+  --blob1:rgba(63,122,80,.78); --blob2:rgba(232,170,64,.72); --blob3:rgba(70,170,170,.68); --blob4:rgba(150,200,90,.70);
+}
+:root[data-theme="dark"]{
+  --g-bg:rgba(30,46,35,.46);
+  --g-bg-strong:rgba(22,34,26,.82);
+  --g-tint:rgba(125,186,138,.14);
+  --g-line:rgba(255,255,255,.20);
+  --g-line-soft:rgba(255,255,255,.09);
+  --g-hi:rgba(255,255,255,.26);
+  --g-lo:rgba(0,0,0,.35);
+  --g-shadow:0 10px 36px rgba(0,0,0,.50),0 2px 6px rgba(0,0,0,.30);
+  --g-input:rgba(255,255,255,.07);
+  --blob1:rgba(46,110,66,.55); --blob2:rgba(150,110,40,.40); --blob3:rgba(30,100,110,.50); --blob4:rgba(70,120,60,.40);
+}
+
+/* Fundo vivo: manchas de cor desfocadas que se movem devagar atrás do vidro */
+body{background:var(--bg)}
+body::before{
+  content:"";position:fixed;inset:-12%;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(38vmax 38vmax at 14% 10%,var(--blob1),transparent 62%),
+    radial-gradient(34vmax 34vmax at 88% 14%,var(--blob2),transparent 62%),
+    radial-gradient(42vmax 42vmax at 82% 92%,var(--blob3),transparent 62%),
+    radial-gradient(32vmax 32vmax at 8% 88%,var(--blob4),transparent 62%);
+  animation:g-drift 28s ease-in-out infinite alternate;
+}
+@keyframes g-drift{
+  0%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  50%{transform:translate3d(2.5%,-2%,0) rotate(4deg) scale(1.06)}
+  100%{transform:translate3d(-2.5%,2.5%,0) rotate(-3deg) scale(1.02)}
+}
+
+/* Superfícies de vidro */
+.card,.stat,.gitem,.pitem,.dropzone,.banner,.seg,.btn:not(.primary):not(.danger),.sp,.modal,.viewer-img{
+  -webkit-backdrop-filter:var(--g-blur);backdrop-filter:var(--g-blur);
+}
+.card,.stat,.gitem,.pitem{
+  background:
+    linear-gradient(135deg,var(--g-hi) 0%,rgba(255,255,255,0) 38%),
+    var(--g-bg);
+  border:1px solid var(--g-line);
+  box-shadow:var(--g-shadow),inset 0 1px 0 var(--g-hi),inset 0 -1px 0 var(--g-lo),inset 0 0 0 1px var(--g-line-soft);
+}
+:root[data-theme="dark"] .card,:root[data-theme="dark"] .stat,:root[data-theme="dark"] .gitem,:root[data-theme="dark"] .pitem{
+  background:linear-gradient(135deg,rgba(255,255,255,.11) 0%,rgba(255,255,255,0) 38%),var(--g-bg);
+}
+.card.flat{box-shadow:0 4px 16px rgba(29,42,33,.10),inset 0 1px 0 var(--g-hi),inset 0 0 0 1px var(--g-line-soft)}
+.card,.stat{border-radius:22px}
+.gitem,.pitem{border-radius:18px}
+.sp.card{border-radius:24px}
+.sp .pimg{border-radius:0}
+.pimg{background:var(--g-tint)}
+.ph{background:var(--g-tint)}
+
+/* Cartões interativos: levitam ao passar o cursor, com reflexo de luz */
+@media (hover:hover){
+  .sp.card,.gitem,.stat{transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s}
+  .sp.card:hover,.gitem:hover{transform:translateY(-4px) scale(1.012);border-color:rgba(255,255,255,.9);
+    box-shadow:0 16px 44px rgba(29,42,33,.22),inset 0 1px 0 var(--g-hi),inset 0 -1px 0 var(--g-lo)}
+  :root[data-theme="dark"] .sp.card:hover,:root[data-theme="dark"] .gitem:hover{border-color:rgba(255,255,255,.35)}
+}
+
+/* Barra superior: o desfoque fica em um pseudo-elemento para não quebrar
+   o menu fixo do celular (backdrop-filter criaria um novo bloco de contenção) */
+.topbar{background:transparent;box-shadow:none;color:var(--ink)}
+:root[data-theme="dark"] .topbar{background:transparent;color:var(--ink)}
+.topbar::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.28)),var(--g-tint);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);
+  border-bottom:1px solid var(--g-line);
+  box-shadow:0 6px 24px rgba(29,42,33,.12),inset 0 1px 0 var(--g-hi);
+}
+:root[data-theme="dark"] .topbar::before{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03)),rgba(20,32,24,.55)}
+.brand{color:var(--primary)}
+:root[data-theme="dark"] .brand{color:var(--ink)}
+.brand svg circle{fill:var(--g-tint)}
+.nav a{color:var(--ink);transition:background .2s}
+.nav a:hover{background:var(--g-tint)}
+.nav a[aria-current="page"]{background:var(--g-bg-strong);color:var(--primary);
+  box-shadow:inset 0 1px 0 var(--g-hi),0 2px 10px rgba(29,42,33,.14)}
+.icon-btn{background:var(--g-bg);color:var(--ink);border:1px solid var(--g-line);
+  box-shadow:inset 0 1px 0 var(--g-hi),0 2px 8px rgba(29,42,33,.12)}
+.icon-btn:hover{background:var(--g-bg-strong)}
+@media (max-width:720px){
+  .nav,:root[data-theme="dark"] .nav{
+    left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));border-radius:26px;padding:6px;
+    background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.22)),var(--g-tint);
+    -webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);
+    border:1px solid var(--g-line);box-shadow:var(--g-shadow),inset 0 1px 0 var(--g-hi);
+  }
+  :root[data-theme="dark"] .nav{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03)),rgba(20,32,24,.6)}
+  .nav a{border-radius:20px}
+}
+
+/* Cabeçalho de boas-vindas: vidro verde com reflexo */
+.hero{
+  background:
+    radial-gradient(120% 140% at 0% 0%,rgba(255,255,255,.38),rgba(255,255,255,0) 50%),
+    linear-gradient(135deg,rgba(44,90,58,.88),rgba(63,122,80,.62));
+  border:1px solid var(--g-line);border-radius:28px;color:#fff;
+  -webkit-backdrop-filter:var(--g-blur);backdrop-filter:var(--g-blur);
+  box-shadow:var(--g-shadow),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(0,0,0,.18);
+}
+:root[data-theme="dark"] .hero{
+  background:radial-gradient(120% 140% at 0% 0%,rgba(255,255,255,.14),rgba(255,255,255,0) 50%),linear-gradient(135deg,rgba(40,86,54,.80),rgba(60,110,76,.50));
+  color:#eef2e6;
+}
+
+/* Botões */
+.btn{border-radius:14px;transition:transform .15s,box-shadow .2s,background .2s}
+.btn:not(.primary):not(.danger){
+  background:linear-gradient(180deg,var(--g-hi),rgba(255,255,255,0)) ,var(--g-bg);
+  border:1px solid var(--g-line);color:var(--ink);
+  box-shadow:inset 0 1px 0 var(--g-hi),inset 0 -1px 0 var(--g-lo),0 2px 8px rgba(29,42,33,.10);
+}
+:root[data-theme="dark"] .btn:not(.primary):not(.danger){background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0)),var(--g-bg)}
+.btn.primary{
+  background:linear-gradient(180deg,rgba(255,255,255,.30),rgba(255,255,255,0) 55%),var(--primary);
+  border:1px solid rgba(255,255,255,.45);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 6px rgba(0,0,0,.18),0 6px 18px rgba(44,90,58,.35);
+}
+.btn.primary:hover{background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,0) 55%),var(--primary-2)}
+:root[data-theme="dark"] .btn.primary{box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 -2px 6px rgba(0,0,0,.25),0 6px 18px rgba(0,0,0,.4)}
+.btn.danger{
+  background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0)),var(--danger-soft);
+  box-shadow:inset 0 1px 0 var(--g-hi),0 2px 8px rgba(166,58,46,.15);
+}
+.btn:active{transform:scale(.97)}
+.btn:hover{border-color:var(--g-line)}
+.fav{filter:drop-shadow(0 1px 3px rgba(152,114,47,.45))}
+
+/* Campos de formulário */
+input[type=text],input[type=search],input[type=date],select,textarea{
+  background:var(--g-input);border:1px solid var(--g-line);border-radius:14px;
+  box-shadow:inset 0 2px 6px var(--g-lo),inset 0 1px 0 var(--g-line-soft);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+input[type=text]:focus,input[type=search]:focus,input[type=date]:focus,select:focus,textarea:focus{background:var(--g-bg-strong)}
+.dropzone{background:var(--g-tint);border:2px dashed var(--g-line);border-radius:18px}
+
+/* Controles e avisos */
+.seg{border:1px solid var(--g-line);border-radius:14px;background:var(--g-bg);box-shadow:inset 0 1px 0 var(--g-hi)}
+.seg button{background:transparent;transition:background .2s}
+.seg button[aria-pressed="true"]{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0)),var(--primary);box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
+.badge{background:var(--g-tint);border:1px solid var(--g-line-soft);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.badge.alt{background:color-mix(in srgb,var(--warn-bg) 70%,transparent)}
+.banner{border:1px solid var(--g-line);border-radius:18px;box-shadow:inset 0 1px 0 var(--g-hi)}
+.banner.warn{background:color-mix(in srgb,var(--warn-bg) 72%,transparent)}
+.banner.ok{background:color-mix(in srgb,var(--ok-bg) 72%,transparent)}
+.banner.err{background:color-mix(in srgb,var(--danger-soft) 78%,transparent)}
+.steps li::before{background:var(--g-tint);border:1px solid var(--g-line);box-shadow:inset 0 1px 0 var(--g-hi)}
+.sheet-head .pimg{border-radius:24px;border:1px solid var(--g-line)}
+.sp-list .sp{border-radius:22px}
+
+/* Janelas, avisos e carregamento */
+.backdrop{background:rgba(16,28,20,.38);-webkit-backdrop-filter:blur(10px) saturate(130%);backdrop-filter:blur(10px) saturate(130%)}
+.modal{
+  background:linear-gradient(135deg,var(--g-hi),rgba(255,255,255,0) 35%),var(--g-bg-strong);
+  border:1px solid var(--g-line);border-radius:28px;
+  box-shadow:0 24px 70px rgba(0,0,0,.32),inset 0 1px 0 var(--g-hi),inset 0 -1px 0 var(--g-lo);
+}
+:root[data-theme="dark"] .modal{background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,0) 35%),var(--g-bg-strong)}
+.viewer-img{border-radius:20px;border:1px solid var(--g-line-soft)}
+.toast{
+  background:rgba(22,34,26,.72);color:#f2f5ea;border:1px solid rgba(255,255,255,.22);border-radius:18px;
+  -webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);
+  box-shadow:0 10px 30px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.25);
+}
+.toast.err{background:rgba(166,58,46,.80);color:#fff}
+.busy{background:rgba(12,22,16,.45);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.skip{border-radius:0 0 12px 12px}
+
+/* Em telas pequenas o desfoque custa mais: reduz um pouco a intensidade */
+@media (max-width:720px){
+  :root{--g-blur:blur(12px) saturate(160%)}
+  body::before{animation-duration:40s}
+}
+/* Sem movimento e sem transparência, quando o usuário ou o navegador pedir */
+@media (prefers-reduced-motion:reduce){
+  body::before{animation:none}
+  .sp.card,.gitem,.stat,.btn{transition:none}
+  .sp.card:hover,.gitem:hover{transform:none}
+}
+@media (prefers-reduced-transparency:reduce){
+  :root{--g-bg:var(--card);--g-input:var(--card)}
+  .card,.stat,.gitem,.pitem,.modal{background:var(--card)}
+}
+/* Navegadores sem backdrop-filter: superfícies mais opacas para manter a leitura */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  :root{--g-bg:var(--card);--g-bg-strong:var(--card);--g-input:var(--card)}
+  .topbar::before{background:var(--surface)}
+  .nav,:root[data-theme="dark"] .nav{background:var(--surface)}
+  .backdrop{background:rgba(16,28,20,.6)}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Ir para o conteúdo</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#/" aria-label="Compêndio de Animais — início">
+      <!-- Logotipo: folha estilizada em SVG incorporado -->
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="rgba(255,255,255,.18)"/><path d="M36 10C20 10 11 18 11 30c0 2 .4 4 1 6 3-9 9-15 17-19-6 5-10 11-12 19 2 .6 4 1 6 1 12 0 19-9 19-27z" fill="currentColor"/></svg>
+      <span><b>Compêndio de Animais</b><small>Enciclopédia pessoal de história natural</small></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Principal">
+      <a href="#/" data-nav="home">Início</a>
+      <a href="#/catalogo" data-nav="catalogo">Catálogo</a>
+      <a href="#/backup" data-nav="backup">Backup</a>
+    </nav>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">◐</button>
+  </div>
+</header>
+
+<main id="main" class="wrap" tabindex="-1"></main>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div id="overlay-root"></div>
+<div id="busy-root"></div>
+
+<script>
+'use strict';
+/* ==========================================================
+   Compêndio de Animais — aplicação (JavaScript puro, sem bibliotecas)
+   Armazenamento: IndexedDB (registros + Blobs de imagens).
+   Nenhum dado sai do dispositivo.
+   ========================================================== */
+(() => {
+
+/* ---------- Constantes ---------- */
+const DB_NAME = 'compendio_de_animais';
+const DB_VERSION = 1;
+const APP_ID = 'compendio-de-animais';
+const FORMAT_VERSION = 1;               // versão do formato de backup
+const GROUPS = ['Aves','Mamíferos','Répteis','Anfíbios','Peixes','Invertebrados','Outros','Não identificado'];
+const CERTAINTY = { '':'Não informado', confirmada:'Confirmada por mim', provavel:'Provável', nao_identificada:'Não identificada' };
+const TAXON = [['kingdom','Reino'],['phylum','Filo'],['class','Classe'],['order','Ordem'],['family','Família'],['genus','Gênero']];
+const INFO = [['description','Descrição'],['habitat','Habitat'],['distribution','Distribuição geográfica'],['diet','Alimentação'],['behavior','Comportamento'],['reproduction','Reprodução'],['curiosities','Curiosidades'],['notes','Notas pessoais']];
+const SP_TEXT = ['commonName','scientificName','kingdom','phylum','class','order','family','genus','description','habitat','distribution','diet','behavior','reproduction','curiosities','notes'];
+const ENVIRONMENTS = ['Floresta','Mata ciliar','Cerrado / campo','Área urbana','Jardim / quintal','Rio / lago','Mar / costa','Manguezal','Caverna','Outro'];
+
+/* ---------- Utilitários ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+// Escapa texto do usuário antes de inseri-lo em HTML (evita injeção de HTML/JS)
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iso = () => new Date().toISOString();
+const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+function uid() {
+  try { if (crypto.randomUUID) return crypto.randomUUID(); } catch (e) { /* segue para o plano B */ }
+  const b = crypto.getRandomValues(new Uint8Array(16));
+  return Array.from(b, x => x.toString(16).padStart(2, '0')).join('');
+}
+function fmtBytes(n) {
+  if (!n) return '0 B';
+  const u = ['B','KB','MB','GB']; let i = 0;
+  while (n >= 1024 && i < u.length - 1) { n /= 1024; i++; }
+  return n.toFixed(i === 0 ? 0 : 1).replace('.', ',') + ' ' + u[i];
+}
+function fmtDay(d) { // 'AAAA-MM-DD' → data por extenso (sem deslocamento de fuso)
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || '');
+  if (!m) return 'Data não informada';
+  return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+function fmtStamp(s) { try { return new Date(s).toLocaleString('pt-BR', { dateStyle: 'long', timeStyle: 'short' }); } catch (e) { return String(s); } }
+function todayLocal() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+const plural = (n, a, b) => n + ' ' + (n === 1 ? a : b);
+function lsGet(k, def) { try { const v = localStorage.getItem(k); return v == null ? def : v; } catch (e) { return def; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* preferência apenas; ignorar */ } }
+const IMG_EXT = { jpg:'image/jpeg', jpeg:'image/jpeg', png:'image/png', gif:'image/gif', webp:'image/webp', avif:'image/avif', bmp:'image/bmp', heic:'image/heic', heif:'image/heif', tif:'image/tiff', tiff:'image/tiff' };
+function guessType(name) { const m = /\.([a-z0-9]+)$/i.exec(name || ''); return (m && IMG_EXT[m[1].toLowerCase()]) || 'application/octet-stream'; }
+const isImage = f => (f.type && f.type.indexOf('image/') === 0) || (!f.type && guessType(f.name) !== 'application/octet-stream');
+
+/* ---------- Avisos, janelas e indicador de carregamento ---------- */
+function toast(msg, type) {
+  const t = document.createElement('div');
+  t.className = 'toast' + (type === 'err' ? ' err' : '');
+  t.textContent = msg;
+  $('#toasts').appendChild(t);
+  setTimeout(() => t.remove(), type === 'err' ? 8000 : 4500);
+}
+function showBusy(msg) {
+  $('#busy-root').innerHTML = '<div class="busy" role="alert"><div class="spin"></div><p id="busymsg"></p></div>';
+  $('#busymsg').textContent = msg || 'Aguarde…';
+}
+const setBusy = msg => { const e = $('#busymsg'); if (e) e.textContent = msg; };
+const hideBusy = () => { $('#busy-root').innerHTML = ''; };
+
+function modal(html, opts = {}) {
+  const bd = document.createElement('div');
+  bd.className = 'backdrop';
+  bd.innerHTML = '<div class="modal' + (opts.wide ? ' wide' : '') + '" role="dialog" aria-modal="true">' + html + '</div>';
+  $('#overlay-root').appendChild(bd);
+  const last = document.activeElement;
+  const el = bd.firstElementChild;
+  let closed = false;
+  const key = e => { if (e.key === 'Escape') close(); if (opts.onKey) opts.onKey(e); };
+  function close() {
+    if (closed) return; closed = true;
+    document.removeEventListener('keydown', key);
+    bd.remove();
+    if (opts.onClose) opts.onClose();
+    if (last && last.focus) try { last.focus(); } catch (e) {}
+  }
+  bd.addEventListener('mousedown', e => { if (e.target === bd) close(); });
+  document.addEventListener('keydown', key);
+  bd._close = close;
+  const f = $('button,input,select,textarea', el); if (f) f.focus();
+  return { el, close };
+}
+function closeOverlays() { $$('#overlay-root .backdrop').forEach(b => b._close && b._close()); }
+
+// Janela de confirmação; "message" deve ser HTML já escapado pelo chamador
+function confirmDialog({ title, message, confirmText = 'Confirmar', danger = false }) {
+  return new Promise(res => {
+    const m = modal('<h2>' + esc(title) + '</h2><div>' + message + '</div><div class="row end"><button class="btn" data-a="no" type="button">Cancelar</button><button class="btn ' + (danger ? 'danger' : 'primary') + '" data-a="yes" type="button">' + esc(confirmText) + '</button></div>', { onClose: () => res(false) });
+    $('[data-a=no]', m.el).onclick = () => m.close();
+    $('[data-a=yes]', m.el).onclick = () => { res(true); m.close(); };
+  });
+}
+
+/* ---------- Tema ---------- */
+function applyTheme(t) {
+  if (!t) t = lsGet('compendio-tema', (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', t);
+  return t;
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const nxt = cur === 'dark' ? 'light' : 'dark';
+  lsSet('compendio-tema', nxt); applyTheme(nxt);
+}
+
+/* ==========================================================
+   Banco de dados (IndexedDB)
+   Lojas: species, observations, photos (metadados), originals (Blob original),
+          thumbs (miniatura), meta (datas de backup/alteração)
+   ========================================================== */
+let db = null, dbError = null;
+const rq = r => new Promise((res, rej) => { r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+const txDone = tx => new Promise((res, rej) => {
+  tx.oncomplete = () => res();
+  tx.onerror = () => rej(tx.error || new Error('Erro na transação'));
+  tx.onabort = () => rej(tx.error || new Error('Transação cancelada'));
+});
+
+function openDB() {
+  return new Promise((res, rej) => {
+    if (!('indexedDB' in window) || !window.indexedDB) return rej(new Error('Este navegador não oferece IndexedDB.'));
+    let r;
+    try { r = indexedDB.open(DB_NAME, DB_VERSION); } catch (e) { return rej(e); }
+    r.onupgradeneeded = () => {
+      const d = r.result;
+      d.createObjectStore('species', { keyPath: 'id' });
+      const o = d.createObjectStore('observations', { keyPath: 'id' }); o.createIndex('speciesId', 'speciesId');
+      const p = d.createObjectStore('photos', { keyPath: 'id' }); p.createIndex('speciesId', 'speciesId'); p.createIndex('observationId', 'observationId');
+      d.createObjectStore('originals', { keyPath: 'id' });
+      d.createObjectStore('thumbs', { keyPath: 'id' });
+      d.createObjectStore('meta', { keyPath: 'key' });
+    };
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error || new Error('Falha ao abrir o banco de dados.'));
+    r.onblocked = () => rej(new Error('O banco está bloqueado por outra aba aberta. Feche as outras abas do Compêndio e recarregue.'));
+  });
+}
+
+// Transação de escrita: tudo ou nada. Registra também a data da última alteração.
+async function writeTx(stores, fn) {
+  const tx = db.transaction(stores.concat(['meta']), 'readwrite');
+  const done = txDone(tx); done.catch(() => {});
+  try {
+    await fn(tx);
+    await rq(tx.objectStore('meta').put({ key: 'lastChangeAt', value: iso() }));
+  } catch (e) { try { tx.abort(); } catch (x) {} throw e; }
+  await done;
+}
+
+function explainError(e) {
+  const n = e && e.name;
+  if (n === 'QuotaExceededError') return 'Espaço de armazenamento insuficiente. Faça um backup, libere espaço no dispositivo ou remova fotografias e tente novamente.';
+  if (n === 'SecurityError' || n === 'InvalidStateError') return 'O navegador bloqueou o armazenamento local (modo privado ou permissões restritas). Tente outro navegador ou uma janela normal.';
+  if (n === 'AbortError') return 'A gravação foi cancelada pelo navegador. Nada foi alterado. Tente novamente.';
+  return 'Falha no armazenamento: ' + ((e && e.message) || 'erro desconhecido') + '. Nada foi alterado.';
+}
+
+/* ---------- Cache em memória (somente dados leves, sem imagens) ---------- */
+let cache = { species: [], observations: [], photos: [], spById: new Map(), obsBySp: new Map(), phBySp: new Map(), lastBackupAt: null, lastChangeAt: null };
+async function loadAll() {
+  const tx = db.transaction(['species', 'observations', 'photos', 'meta']);
+  const [species, observations, photos, m1, m2] = await Promise.all([
+    rq(tx.objectStore('species').getAll()), rq(tx.objectStore('observations').getAll()), rq(tx.objectStore('photos').getAll()),
+    rq(tx.objectStore('meta').get('lastBackupAt')), rq(tx.objectStore('meta').get('lastChangeAt'))
+  ]);
+  const group = (arr, k) => { const m = new Map(); arr.forEach(x => { if (!m.has(x[k])) m.set(x[k], []); m.get(x[k]).push(x); }); return m; };
+  cache = { species, observations, photos, spById: new Map(species.map(s => [s.id, s])), obsBySp: group(observations, 'speciesId'), phBySp: group(photos, 'speciesId'),
+            lastBackupAt: m1 ? m1.value : null, lastChangeAt: m2 ? m2.value : null };
+}
+
+/* ---------- Miniaturas / imagens ---------- */
+// Gera miniatura JPEG (lado maior = 480 px). O arquivo original NUNCA é alterado.
+async function makeThumb(blob) {
+  const MAX = 480; let src = null, w = 0, h = 0, url = null;
+  try {
+    if (window.createImageBitmap) { try { src = await createImageBitmap(blob); w = src.width; h = src.height; } catch (e) { src = null; } }
+    if (!src) {
+      url = URL.createObjectURL(blob);
+      const img = new Image(); img.src = url;
+      await new Promise((ok, bad) => { img.onload = ok; img.onerror = () => bad(new Error('Formato de imagem não suportado por este navegador')); });
+      src = img; w = img.naturalWidth; h = img.naturalHeight;
+    }
+    if (!w || !h) throw new Error('Imagem vazia');
+    const sc = Math.min(1, MAX / Math.max(w, h));
+    const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w * sc)); c.height = Math.max(1, Math.round(h * sc));
+    const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(src, 0, 0, c.width, c.height);
+    const out = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.82));
+    if (!out) throw new Error('Falha ao gerar miniatura');
+    return { blob: out };
+  } finally { if (src && src.close) try { src.close(); } catch (e) {} if (url) URL.revokeObjectURL(url); }
+}
+
+// Cache de URLs de miniaturas (revogadas a cada mudança de tela)
+let thumbCache = new Map();
+function clearThumbs() { const old = thumbCache; thumbCache = new Map(); old.forEach(p => p.then(u => { if (u) URL.revokeObjectURL(u); }).catch(() => {})); }
+function getThumbURL(id) {
+  if (thumbCache.has(id)) return thumbCache.get(id);
+  const p = (async () => {
+    const t = await rq(db.transaction(['thumbs']).objectStore('thumbs').get(id));
+    if (t && t.blob) return URL.createObjectURL(t.blob);
+    // sem miniatura: tenta usar o original (pode ser mais pesado)
+    const o = await rq(db.transaction(['originals']).objectStore('originals').get(id));
+    return o && o.blob ? URL.createObjectURL(o.blob) : null;
+  })();
+  thumbCache.set(id, p); return p;
+}
+function placeholder(img) {
+  const d = document.createElement('div'); d.className = 'ph'; d.setAttribute('role', 'img'); d.setAttribute('aria-label', 'Imagem não pôde ser carregada');
+  d.innerHTML = '<span aria-hidden="true">📷</span><small>Imagem não pôde ser carregada</small>';
+  img.replaceWith(d);
+}
+function hydrate(root) {
+  $$('img[data-pid]', root).forEach(async img => {
+    try { const u = await getThumbURL(img.dataset.pid); if (!u) throw 0; img.onerror = () => placeholder(img); img.src = u; } catch (e) { placeholder(img); }
+  });
+}
+const thumbImg = (id, alt) => '<div class="pimg"><img data-pid="' + esc(id) + '" alt="' + esc(alt) + '" loading="lazy"></div>';
+
+/* ---------- Leitura/ingestão de arquivos de imagem ---------- */
+async function ingestFiles(fileList) {
+  const files = Array.from(fileList), items = [], rejected = [], failed = [];
+  if (!files.length) return items;
+  showBusy('Preparando fotografias…');
+  try {
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      if (!isImage(f)) { rejected.push(f.name); continue; }
+      setBusy('Processando fotografia ' + (i + 1) + ' de ' + files.length + '…');
+      const it = { id: uid(), isNew: true, removed: false, file: f, name: f.name, type: f.type || guessType(f.name), size: f.size, caption: '', thumb: null, thumbFailed: false };
+      try { it.thumb = (await makeThumb(f)).blob; } catch (e) { it.thumbFailed = true; failed.push(f.name); }
+      items.push(it);
+    }
+  } finally { hideBusy(); }
+  if (rejected.length) toast('Arquivos ignorados (não são imagens): ' + rejected.join(', '), 'err');
+  if (failed.length) toast('Não foi possível gerar a miniatura de: ' + failed.join(', ') + '. O original será preservado, mas a pré-visualização pode não aparecer.', 'err');
+  return items;
+}
+async function recordsFromItems(items, speciesId, obsId) {
+  const out = [];
+  for (const it of items) {
+    // Cópia integral dos bytes originais (sem recompressão)
+    const original = new Blob([await it.file.arrayBuffer()], { type: it.type });
+    const t = iso();
+    out.push({ meta: { id: it.id, speciesId, observationId: obsId || null, fileName: it.name, mimeType: it.type, size: original.size, thumbSize: it.thumb ? it.thumb.size : 0, hasThumb: !!it.thumb, caption: it.caption || '', createdAt: t, updatedAt: t }, original, thumb: it.thumb });
+  }
+  return out;
+}
+async function putPhotoRecords(tx, recs) {
+  for (const r of recs) {
+    await rq(tx.objectStore('photos').put(r.meta));
+    await rq(tx.objectStore('originals').put({ id: r.meta.id, blob: r.original }));
+    if (r.thumb) await rq(tx.objectStore('thumbs').put({ id: r.meta.id, blob: r.thumb }));
+  }
+}
+// Garante que a capa da espécie aponte para uma fotografia existente dela
+async function ensureCover(tx, spId) {
+  const S = tx.objectStore('species'), sp = await rq(S.get(spId)); if (!sp) return;
+  let ok = false;
+  if (sp.coverPhotoId) { const p = await rq(tx.objectStore('photos').get(sp.coverPhotoId)); ok = !!p && p.speciesId === spId; }
+  if (!ok) {
+    const all = await rq(tx.objectStore('photos').index('speciesId').getAll(spId));
+    all.sort((a, b) => a.createdAt < b.createdAt ? -1 : 1);
+    const next = all.length ? all[0].id : null;
+    if (sp.coverPhotoId !== next) { sp.coverPhotoId = next; await rq(S.put(sp)); }
+  }
+}
+async function deletePhotoIds(tx, ids) {
+  for (const id of ids) { await rq(tx.objectStore('photos').delete(id)); await rq(tx.objectStore('originals').delete(id)); await rq(tx.objectStore('thumbs').delete(id)); }
+}
+
+/* ---------- Operações do banco ---------- */
+async function dbSaveSpecies(sp, removeIds, captionUpdates, newRecs) {
+  await writeTx(['species', 'photos', 'originals', 'thumbs'], async tx => {
+    await deletePhotoIds(tx, removeIds);
+    for (const u of captionUpdates) {
+      const m = await rq(tx.objectStore('photos').get(u.id));
+      if (m) { m.caption = u.caption; m.updatedAt = iso(); await rq(tx.objectStore('photos').put(m)); }
+    }
+    await putPhotoRecords(tx, newRecs);
+    await rq(tx.objectStore('species').put(sp));
+    await ensureCover(tx, sp.id);
+  });
+}
+async function dbDeleteSpecies(id) {
+  await writeTx(['species', 'observations', 'photos', 'originals', 'thumbs'], async tx => {
+    await deletePhotoIds(tx, await rq(tx.objectStore('photos').index('speciesId').getAllKeys(id)));
+    for (const k of await rq(tx.objectStore('observations').index('speciesId').getAllKeys(id))) await rq(tx.objectStore('observations').delete(k));
+    await rq(tx.objectStore('species').delete(id));
+  });
+}
+async function dbSaveObservation(ob, removeIds, captionUpdates, newRecs) {
+  await writeTx(['species', 'observations', 'photos', 'originals', 'thumbs'], async tx => {
+    if (!(await rq(tx.objectStore('species').get(ob.speciesId)))) throw new Error('A espécie desta observação não existe mais.');
+    await deletePhotoIds(tx, removeIds);
+    for (const u of captionUpdates) {
+      const m = await rq(tx.objectStore('photos').get(u.id));
+      if (m) { m.caption = u.caption; m.updatedAt = iso(); await rq(tx.objectStore('photos').put(m)); }
+    }
+    await putPhotoRecords(tx, newRecs);
+    await rq(tx.objectStore('observations').put(ob));
+    await ensureCover(tx, ob.speciesId);
+  });
+}
+async function dbDeleteObservation(id) {
+  await writeTx(['species', 'observations', 'photos', 'originals', 'thumbs'], async tx => {
+    const ob = await rq(tx.objectStore('observations').get(id)); if (!ob) return;
+    await deletePhotoIds(tx, await rq(tx.objectStore('photos').index('observationId').getAllKeys(id)));
+    await rq(tx.objectStore('observations').delete(id));
+    await ensureCover(tx, ob.speciesId);
+  });
+}
+async function dbAddPhotos(spId, recs) {
+  await writeTx(['species', 'photos', 'originals', 'thumbs'], async tx => { await putPhotoRecords(tx, recs); await ensureCover(tx, spId); });
+}
+async function dbUpdatePhoto(id, patch) {
+  await writeTx(['photos', 'observations'], async tx => {
+    const m = await rq(tx.objectStore('photos').get(id)); if (!m) throw new Error('Fotografia não encontrada.');
+    if (patch.observationId) { // só pode apontar para observação da mesma espécie
+      const o = await rq(tx.objectStore('observations').get(patch.observationId));
+      if (!o || o.speciesId !== m.speciesId) throw new Error('Observação inválida para esta espécie.');
+    }
+    Object.assign(m, patch, { updatedAt: iso() }); await rq(tx.objectStore('photos').put(m));
+  });
+}
+async function dbSetCover(spId, photoId) {
+  await writeTx(['species', 'photos'], async tx => {
+    const p = await rq(tx.objectStore('photos').get(photoId)); const sp = await rq(tx.objectStore('species').get(spId));
+    if (!p || !sp || p.speciesId !== spId) throw new Error('Fotografia inválida.');
+    sp.coverPhotoId = photoId; await rq(tx.objectStore('species').put(sp));
+  });
+}
+async function dbDeletePhoto(id) {
+  await writeTx(['species', 'photos', 'originals', 'thumbs'], async tx => {
+    const m = await rq(tx.objectStore('photos').get(id)); if (!m) return;
+    await deletePhotoIds(tx, [id]); await ensureCover(tx, m.speciesId);
+  });
+}
+async function dbToggleFav(id) {
+  await writeTx(['species'], async tx => { const s = await rq(tx.objectStore('species').get(id)); if (s) { s.favorite = !s.favorite; await rq(tx.objectStore('species').put(s)); } });
+}
+
+/* ==========================================================
+   Backup e restauração
+   ========================================================== */
+const blobToDataURL = b => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error || new Error('Falha ao ler imagem')); r.readAsDataURL(b); });
+function dataURLToBlob(u, label) {
+  if (typeof u !== 'string' || u.indexOf('data:') !== 0) throw new Error(label + ': não é uma Data URL válida.');
+  const i = u.indexOf(','); if (i < 0) throw new Error(label + ': Data URL malformada.');
+  const head = u.slice(5, i); if (!/;base64$/i.test(head)) throw new Error(label + ': a codificação precisa ser Base64.');
+  const mime = head.split(';')[0];
+  if (mime && !/^[\w.+-]+\/[\w.+-]+$/.test(mime)) throw new Error(label + ': tipo de arquivo inválido.');
+  let bin; try { bin = atob(u.slice(i + 1)); } catch (e) { throw new Error(label + ': dados Base64 corrompidos.'); }
+  const bytes = new Uint8Array(bin.length); for (let k = 0; k < bin.length; k++) bytes[k] = bin.charCodeAt(k);
+  return new Blob([bytes], { type: mime });
+}
+
+async function exportBackup() {
+  await loadAll();
+  const { species, observations, photos } = cache;
+  showBusy('Gerando backup…');
+  try {
+    // Monta o JSON em partes para não criar uma única string gigante na memória
+    const parts = ['{"app":' + JSON.stringify(APP_ID) + ',"formatVersion":' + FORMAT_VERSION + ',"exportedAt":' + JSON.stringify(iso()) +
+      ',"counts":' + JSON.stringify({ species: species.length, observations: observations.length, photos: photos.length }) +
+      ',"species":' + JSON.stringify(species) + ',"observations":' + JSON.stringify(observations) + ',"photos":['];
+    for (let i = 0; i < photos.length; i++) {
+      setBusy('Gravando fotografia ' + (i + 1) + ' de ' + photos.length + '…');
+      const m = photos[i];
+      const tx = db.transaction(['originals', 'thumbs']);
+      const [o, t] = await Promise.all([rq(tx.objectStore('originals').get(m.id)), rq(tx.objectStore('thumbs').get(m.id))]);
+      if (!o || !o.blob) throw new Error('O arquivo original da fotografia "' + (m.fileName || m.id) + '" não foi encontrado no banco. Backup cancelado para não gerar um arquivo incompleto.');
+      const rec = Object.assign({}, m, { original: await blobToDataURL(o.blob), thumb: t && t.blob ? await blobToDataURL(t.blob) : null });
+      parts.push((i ? ',' : '') + JSON.stringify(rec));
+    }
+    parts.push(']}');
+    const blob = new Blob(parts, { type: 'application/json' });
+    const d = new Date(), p2 = n => String(n).padStart(2, '0');
+    const name = 'compendio-de-animais-backup-' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '-' + p2(d.getHours()) + p2(d.getMinutes()) + '.json';
+    const url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    await writeTx(['meta'], async t2 => { await rq(t2.objectStore('meta').put({ key: 'lastBackupAt', value: iso() })); });
+    await loadAll();
+    return { name, size: blob.size };
+  } finally { hideBusy(); }
+}
+
+// Valida e saneia o conteúdo (tratado como NÃO confiável). Não toca no banco.
+function validateBackup(obj) {
+  const bad = m => { throw new Error(m); };
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) bad('O arquivo não tem a estrutura de um backup.');
+  if (obj.app !== APP_ID) bad('Este arquivo não é um backup do Compêndio de Animais.');
+  if (!Number.isInteger(obj.formatVersion) || obj.formatVersion < 1) bad('O backup não informa uma versão de formato válida.');
+  if (obj.formatVersion > FORMAT_VERSION) bad('Este backup usa um formato mais novo (v' + obj.formatVersion + ') do que esta versão do aplicativo entende (v' + FORMAT_VERSION + ').');
+  if (!Array.isArray(obj.species) || !Array.isArray(obj.observations) || !Array.isArray(obj.photos)) bad('O backup está incompleto: faltam listas de espécies, observações ou fotografias.');
+  const warnings = [];
+  const str = (v, max) => (typeof v === 'string' ? v : '').slice(0, max);
+  const okId = v => typeof v === 'string' && /^[A-Za-z0-9_-]{1,100}$/.test(v);
+  const dt = v => { const t = typeof v === 'string' ? Date.parse(v) : NaN; return isNaN(t) ? iso() : new Date(t).toISOString(); };
+
+  const species = [], spIds = new Set();
+  obj.species.forEach((s, i) => {
+    if (!s || typeof s !== 'object' || !okId(s.id)) bad('Espécie #' + (i + 1) + ' com identificador inválido.');
+    if (spIds.has(s.id)) bad('Identificador de espécie repetido: ' + s.id);
+    if (typeof s.commonName !== 'string' || !s.commonName.trim()) bad('Espécie #' + (i + 1) + ' sem nome popular.');
+    spIds.add(s.id);
+    const r = { id: s.id, group: GROUPS.includes(s.group) ? s.group : 'Não identificado', certainty: Object.prototype.hasOwnProperty.call(CERTAINTY, s.certainty) ? s.certainty : '',
+      favorite: s.favorite === true, coverPhotoId: okId(s.coverPhotoId) ? s.coverPhotoId : null, createdAt: dt(s.createdAt), updatedAt: dt(s.updatedAt) };
+    SP_TEXT.forEach(k => { r[k] = str(s[k], k === 'commonName' || k === 'scientificName' ? 300 : 20000); });
+    r.commonName = r.commonName.trim(); species.push(r);
+  });
+  const observations = [], obIds = new Map();
+  obj.observations.forEach((o, i) => {
+    if (!o || typeof o !== 'object' || !okId(o.id)) bad('Observação #' + (i + 1) + ' com identificador inválido.');
+    if (obIds.has(o.id)) bad('Identificador de observação repetido: ' + o.id);
+    if (!spIds.has(o.speciesId)) bad('A observação #' + (i + 1) + ' aponta para uma espécie inexistente (referência quebrada).');
+    obIds.set(o.id, o.speciesId);
+    observations.push({ id: o.id, speciesId: o.speciesId, date: /^\d{4}-\d{2}-\d{2}$/.test(o.date || '') ? o.date : '', location: str(o.location, 500), environment: str(o.environment, 300),
+      behavior: str(o.behavior, 20000), notes: str(o.notes, 20000), createdAt: dt(o.createdAt), updatedAt: dt(o.updatedAt) });
+  });
+  const photos = [], phIds = new Set();
+  obj.photos.forEach((p, i) => {
+    const lb = 'Fotografia #' + (i + 1);
+    if (!p || typeof p !== 'object' || !okId(p.id)) bad(lb + ' com identificador inválido.');
+    if (phIds.has(p.id)) bad('Identificador de fotografia repetido: ' + p.id);
+    if (!spIds.has(p.speciesId)) bad(lb + ' aponta para uma espécie inexistente.');
+    let obsId = null;
+    if (p.observationId != null) { if (!obIds.has(p.observationId) || obIds.get(p.observationId) !== p.speciesId) bad(lb + ' aponta para uma observação inexistente ou de outra espécie.'); obsId = p.observationId; }
+    const original = dataURLToBlob(p.original, lb + ' (original)');
+    let thumb = null;
+    if (p.thumb != null) { thumb = dataURLToBlob(p.thumb, lb + ' (miniatura)'); if (thumb.type.indexOf('image/') !== 0) bad(lb + ': miniatura com tipo inválido.'); }
+    phIds.add(p.id);
+    photos.push({ meta: { id: p.id, speciesId: p.speciesId, observationId: obsId, fileName: str(p.fileName, 300), mimeType: original.type || str(p.mimeType, 100), size: original.size, thumbSize: thumb ? thumb.size : 0, hasThumb: !!thumb, caption: str(p.caption, 300), createdAt: dt(p.createdAt), updatedAt: dt(p.updatedAt) }, original, thumb });
+  });
+  const byId = new Map(photos.map(p => [p.meta.id, p.meta]));
+  species.forEach(s => { if (s.coverPhotoId && (!byId.has(s.coverPhotoId) || byId.get(s.coverPhotoId).speciesId !== s.id)) { s.coverPhotoId = null; warnings.push('Capa inválida de "' + s.commonName + '" foi ajustada.'); } });
+  return { species, observations, photos, warnings, exportedAt: typeof obj.exportedAt === 'string' ? obj.exportedAt : null };
+}
+
+// Substituição transacional: se algo falhar, a coleção anterior permanece intacta
+async function restoreData(data) {
+  const names = ['species', 'observations', 'photos', 'originals', 'thumbs'];
+  const tx = db.transaction(names.concat(['meta']), 'readwrite');
+  const done = txDone(tx); done.catch(() => {});
+  try {
+    for (const n of names) await rq(tx.objectStore(n).clear());
+    for (const s of data.species) await rq(tx.objectStore('species').put(s));
+    for (const o of data.observations) await rq(tx.objectStore('observations').put(o));
+    await putPhotoRecords(tx, data.photos);
+    for (const s of data.species) await ensureCover(tx, s.id);
+    await rq(tx.objectStore('meta').put({ key: 'lastChangeAt', value: iso() }));
+  } catch (e) { try { tx.abort(); } catch (x) {} throw e; }
+  await done;
+}
+
+/* ==========================================================
+   Editor de fotografias (usado nos formulários)
+   ========================================================== */
+function photoEditor(root, { existing = [], coverId = null, allowCover = true }) {
+  const st = { items: existing.map(m => ({ id: m.id, isNew: false, removed: false, meta: m, caption: m.caption || '', origCaption: m.caption || '' })), coverId };
+  const inputId = 'pf' + uid().slice(0, 8);
+  root.innerHTML = '<div class="dropzone"><div class="row"><label class="btn" for="' + inputId + '" style="margin:0">＋ Adicionar fotografias</label><input type="file" id="' + inputId + '" accept="image/*" multiple hidden></div>' +
+    '<p class="hint">Você pode escolher várias fotografias de uma vez. Os arquivos originais são guardados sem compressão; as miniaturas servem apenas para acelerar as galerias.</p></div><div class="pgrid"></div>';
+  const grid = $('.pgrid', root);
+
+  function draw() {
+    const live = st.items.filter(i => !i.removed);
+    if (allowCover && !st.coverId && live.length) st.coverId = live[0].id;
+    grid.innerHTML = st.items.map(it => {
+      const name = it.isNew ? it.name : it.meta.fileName;
+      const size = it.isNew ? it.size : it.meta.size;
+      const img = (it.isNew && it.thumbFailed) ? '<div class="pimg"><div class="ph"><span aria-hidden="true">📷</span><small>Pré-visualização indisponível (original será salvo)</small></div></div>' : thumbImg(it.id, it.caption || name || 'Fotografia');
+      return '<figure class="pitem' + (it.removed ? ' removed' : '') + '" data-id="' + esc(it.id) + '"><div style="position:relative">' + img + (it.isNew ? '<span class="newtag">nova</span>' : '') + '</div><figcaption>' +
+        '<input type="text" class="cap" placeholder="Legenda (opcional)" maxlength="300" aria-label="Legenda" value="' + esc(it.caption) + '"' + (it.removed ? ' disabled' : '') + '>' +
+        '<div class="meta">' + esc(name || '') + ' · ' + esc(fmtBytes(size || 0)) + '</div><div class="row between">' +
+        (allowCover ? '<label class="chk small"><input type="radio" name="cover-' + inputId + '" class="cv"' + (st.coverId === it.id ? ' checked' : '') + (it.removed ? ' disabled' : '') + '> Capa</label>' : '<span></span>') +
+        '<button type="button" class="btn sm ' + (it.removed ? '' : 'danger') + ' rm">' + (it.removed ? 'Desfazer' : 'Remover') + '</button></div></figcaption></figure>';
+    }).join('');
+    hydrate(grid);
+  }
+  grid.addEventListener('input', e => { if (e.target.classList.contains('cap')) { const it = st.items.find(i => i.id === e.target.closest('.pitem').dataset.id); if (it) it.caption = e.target.value; } });
+  grid.addEventListener('change', e => { if (e.target.classList.contains('cv')) { st.coverId = e.target.closest('.pitem').dataset.id; } });
+  grid.addEventListener('click', e => {
+    const b = e.target.closest('.rm'); if (!b) return;
+    const id = b.closest('.pitem').dataset.id, it = st.items.find(i => i.id === id); if (!it) return;
+    if (it.isNew) { st.items = st.items.filter(i => i !== it); }
+    else it.removed = !it.removed;
+    if (st.coverId === id && (it.removed || it.isNew)) st.coverId = null;
+    draw();
+  });
+  $('#' + inputId, root).addEventListener('change', async e => {
+    const files = e.target.files; const items = await ingestFiles(files); e.target.value = '';
+    items.forEach(it => { thumbCache.set(it.id, Promise.resolve(it.thumb ? URL.createObjectURL(it.thumb) : null)); st.items.push(it); });
+    draw();
+  });
+  draw();
+  return st;
+}
+// Resume alterações do editor para gravação
+function editorChanges(st) {
+  return {
+    removeIds: st.items.filter(i => !i.isNew && i.removed).map(i => i.id),
+    captionUpdates: st.items.filter(i => !i.isNew && !i.removed && i.caption !== i.origCaption).map(i => ({ id: i.id, caption: i.caption.trim().slice(0, 300) })),
+    newItems: st.items.filter(i => i.isNew && !i.removed)
+  };
+}
+
+/* ==========================================================
+   Visualizador de fotografias (tamanho grande + ações)
+   ========================================================== */
+function openViewer(spId, startId) {
+  const sorted = () => (cache.phBySp.get(spId) || []).slice().sort((a, b) => a.createdAt < b.createdAt ? -1 : 1);
+  let list = sorted(), idx = Math.max(0, list.findIndex(p => p.id === startId)), url = null;
+  const obsList = (cache.obsBySp.get(spId) || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const m = modal('<div class="viewer-grid"><div><div class="viewer-img" id="vImg"></div><div class="row between" style="margin-top:8px"><button class="btn sm" id="vPrev" type="button">‹ Anterior</button><span class="muted small" id="vPos"></span><button class="btn sm" id="vNext" type="button">Próxima ›</button></div></div>' +
+    '<div><h3 id="vName"></h3><p class="muted small" id="vInfo"></p><div class="field"><label for="vCap">Legenda</label><input type="text" id="vCap" maxlength="300"></div>' +
+    '<div class="field"><label for="vObs">Observação associada</label><select id="vObs"><option value="">Nenhuma (galeria geral da espécie)</option>' +
+    obsList.map(o => '<option value="' + esc(o.id) + '">' + esc(fmtDay(o.date)) + (o.location ? ' — ' + esc(o.location) : '') + '</option>').join('') + '</select></div>' +
+    '<div class="row"><button class="btn primary sm" id="vSave" type="button">Salvar</button><button class="btn sm" id="vCover" type="button">Definir como capa</button><a class="btn sm" id="vDl">Baixar original</a></div>' +
+    '<div class="row" style="margin-top:10px"><button class="btn danger sm" id="vDel" type="button">Excluir fotografia</button><button class="btn sm" id="vClose" type="button">Fechar</button></div></div></div>',
+    { wide: true, onClose: () => { if (url) URL.revokeObjectURL(url); }, onKey: e => { if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return; if (e.key === 'ArrowLeft') go(-1); if (e.key === 'ArrowRight') go(1); } });
+  const q = s => $(s, m.el);
+  async function show() {
+    const p = list[idx]; if (!p) return m.close();
+    if (url) { URL.revokeObjectURL(url); url = null; }
+    q('#vPos').textContent = (idx + 1) + ' de ' + list.length;
+    q('#vName').textContent = p.fileName || 'Fotografia';
+    q('#vInfo').textContent = (p.mimeType || 'tipo desconhecido') + ' · ' + fmtBytes(p.size) + ' · adicionada em ' + fmtStamp(p.createdAt);
+    q('#vCap').value = p.caption || ''; q('#vObs').value = p.observationId || '';
+    const sp = cache.spById.get(spId); const isCover = sp && sp.coverPhotoId === p.id;
+    q('#vCover').disabled = isCover; q('#vCover').textContent = isCover ? '★ É a capa' : 'Definir como capa';
+    const box = q('#vImg'); box.innerHTML = '<div class="ph"><small>Carregando…</small></div>';
+    const dl = q('#vDl'); dl.removeAttribute('href');
+    try {
+      const o = await rq(db.transaction(['originals']).objectStore('originals').get(p.id));
+      if (!o || !o.blob) throw new Error('sem arquivo');
+      if (list[idx] !== p) return;
+      url = URL.createObjectURL(o.blob); dl.href = url; dl.download = p.fileName || 'fotografia';
+      const img = new Image(); img.alt = p.caption || p.fileName || 'Fotografia';
+      img.onerror = () => { box.innerHTML = '<div class="ph"><span aria-hidden="true">📷</span><small>Este navegador não consegue exibir esta imagem. O arquivo original está preservado: use “Baixar original”.</small></div>'; };
+      img.src = url; box.innerHTML = ''; box.appendChild(img);
+    } catch (e) { box.innerHTML = '<div class="ph"><span aria-hidden="true">⚠️</span><small>Não foi possível carregar o arquivo desta fotografia.</small></div>'; dl.style.display = 'none'; }
+  }
+  function go(d) { if (!list.length) return; idx = (idx + d + list.length) % list.length; show(); }
+  async function refresh() { await loadAll(); list = sorted(); refreshView(); }
+  q('#vPrev').onclick = () => go(-1); q('#vNext').onclick = () => go(1); q('#vClose').onclick = () => m.close();
+  q('#vSave').onclick = async () => {
+    const p = list[idx];
+    try { await dbUpdatePhoto(p.id, { caption: q('#vCap').value.trim().slice(0, 300), observationId: q('#vObs').value || null }); await refresh(); toast('Fotografia atualizada.'); show(); }
+    catch (e) { toast(explainError(e), 'err'); }
+  };
+  q('#vCover').onclick = async () => { try { await dbSetCover(spId, list[idx].id); await refresh(); toast('Capa definida.'); show(); } catch (e) { toast(explainError(e), 'err'); } };
+  q('#vDel').onclick = async () => {
+    const p = list[idx];
+    if (!await confirmDialog({ title: 'Excluir fotografia', message: '<p>A fotografia <b>' + esc(p.fileName || '') + '</b> (original e miniatura) será excluída permanentemente deste navegador. Se você não tiver um backup que a contenha, ela não poderá ser recuperada.</p>', confirmText: 'Excluir fotografia', danger: true })) return;
+    try { await dbDeletePhoto(p.id); await refresh(); toast('Fotografia excluída.'); if (!list.length) return m.close(); idx = Math.min(idx, list.length - 1); show(); }
+    catch (e) { toast(explainError(e), 'err'); }
+  };
+  show();
+}
+
+/* ==========================================================
+   Telas
+   ========================================================== */
+const ui = { q: '', group: '', fav: false, sort: lsGet('compendio-ordem', 'nome_az'), view: lsGet('compendio-vista', 'grid') };
+
+function backupStatus() {
+  if (!cache.species.length && !cache.lastBackupAt) return null;
+  if (!cache.lastBackupAt) return { cls: 'warn', text: 'Nenhum backup foi feito até agora. Sua coleção existe somente neste navegador e pode ser perdida se os dados do site forem apagados.' };
+  if (cache.lastChangeAt && cache.lastChangeAt > cache.lastBackupAt) return { cls: 'warn', text: 'Último backup gerado em ' + fmtStamp(cache.lastBackupAt) + '. Há alterações feitas depois dele que ainda não estão em nenhum backup.' };
+  return { cls: 'ok', text: 'Último backup gerado em ' + fmtStamp(cache.lastBackupAt) + ', sem alterações posteriores. Confira se o arquivo foi realmente salvo no seu dispositivo.' };
+}
+const spName = id => { const s = cache.spById.get(id); return s ? s.commonName : 'Espécie removida'; };
+
+/* ---- Início ---- */
+function viewHome(main) {
+  document.title = 'Compêndio de Animais';
+  const { species, observations, photos } = cache;
+  const bytes = photos.reduce((a, p) => a + (p.size || 0) + (p.thumbSize || 0), 0);
+  if (!species.length) {
+    main.innerHTML = '<section class="hero"><h1>Bem-vindo ao Compêndio de Animais</h1><p>Seu catálogo pessoal de história natural: espécies, fotografias próprias e um diário das suas observações. Tudo fica guardado neste dispositivo — nada é enviado para a internet.</p></section>' +
+      '<div class="card"><h2>Como começar</h2><ol class="steps"><li><b>Cadastre uma espécie.</b> Basta o nome popular; o restante é opcional e pode ser preenchido depois.</li><li><b>Adicione fotografias.</b> Escolha várias de uma vez; os originais são preservados.</li><li><b>Registre observações.</b> Anote data, local e comportamento de cada encontro.</li><li><b>Faça backups.</b> Eles são a única proteção contra perda dos dados do navegador.</li></ol>' +
+      '<div class="row"><a class="btn primary" href="#/especie/nova">＋ Cadastrar primeira espécie</a><a class="btn" href="#/backup">Restaurar um backup</a></div></div>' +
+      '<div class="banner warn"><b>Atenção:</b> os dados ficam no armazenamento deste navegador. Apagar os dados do site/navegador pode apagar a coleção, e ela não é sincronizada entre dispositivos. Faça backups periódicos.</div>';
+    return;
+  }
+  const st = backupStatus();
+  const recentPh = photos.slice().sort((a, b) => a.createdAt < b.createdAt ? 1 : -1).slice(0, 8);
+  const recentOb = observations.slice().sort((a, b) => ((b.date || '') + b.createdAt).localeCompare((a.date || '') + a.createdAt)).slice(0, 5);
+  main.innerHTML = '<section class="hero"><h1>Compêndio de Animais</h1><p>Sua enciclopédia pessoal de história natural.</p><div class="row"><a class="btn primary" style="background:#fff;color:#1d3324;border-color:#fff" href="#/especie/nova">＋ Cadastrar espécie</a><a class="btn" href="#/observacao/nova">✎ Registrar observação</a><a class="btn" href="#/backup">⇩ Backup e restauração</a></div></section>' +
+    '<div class="stats"><div class="stat"><b>' + species.length + '</b><span>' + (species.length === 1 ? 'espécie cadastrada' : 'espécies cadastradas') + '</span></div><div class="stat"><b>' + observations.length + '</b><span>' + (observations.length === 1 ? 'observação registrada' : 'observações registradas') + '</span></div><div class="stat"><b>' + photos.length + '</b><span>' + (photos.length === 1 ? 'fotografia armazenada' : 'fotografias armazenadas') + '</span></div><div class="stat"><b>' + esc(fmtBytes(bytes)) + '</b><span>espaço estimado (fotos e miniaturas)</span></div></div>' +
+    (st ? '<div class="banner ' + st.cls + '">' + esc(st.text) + ' <a href="#/backup">Ir para o backup</a></div>' : '') +
+    '<div class="section-title"><h2>Fotografias recentes</h2><a href="#/catalogo">Ver catálogo →</a></div>' +
+    (recentPh.length ? '<div class="gallery">' + recentPh.map(p => '<a class="gitem" style="display:block;text-decoration:none" href="#/especie/' + esc(p.speciesId) + '">' + thumbImg(p.id, p.caption || spName(p.speciesId)) + '<small>' + esc(spName(p.speciesId)) + '</small></a>').join('') + '</div>' : '<div class="card empty">Ainda não há fotografias. Abra uma espécie e adicione as suas.</div>') +
+    '<div class="section-title"><h2>Observações recentes</h2></div>' +
+    (recentOb.length ? recentOb.map(o => '<div class="card obs flat"><b><a href="#/especie/' + esc(o.speciesId) + '">' + esc(spName(o.speciesId)) + '</a></b> <span class="muted">· ' + esc(fmtDay(o.date)) + (o.location ? ' · ' + esc(o.location) : '') + '</span>' + (o.notes ? '<p class="pre small" style="margin:.4em 0 0">' + esc(o.notes.slice(0, 200)) + (o.notes.length > 200 ? '…' : '') + '</p>' : '') + '</div>').join('') : '<div class="card empty">Nenhuma observação registrada ainda.</div>');
+}
+
+/* ---- Catálogo ---- */
+const SORTS = {
+  nome_az: ['Nome (A–Z)', (a, b) => a.commonName.localeCompare(b.commonName, 'pt-BR', { sensitivity: 'base' })],
+  nome_za: ['Nome (Z–A)', (a, b) => b.commonName.localeCompare(a.commonName, 'pt-BR', { sensitivity: 'base' })],
+  cad_novo: ['Cadastro mais recente', (a, b) => a.createdAt < b.createdAt ? 1 : -1],
+  cad_antigo: ['Cadastro mais antigo', (a, b) => a.createdAt < b.createdAt ? -1 : 1],
+  atu_novo: ['Atualização mais recente', (a, b) => a.updatedAt < b.updatedAt ? 1 : -1],
+  obs_mais: ['Mais observações', (a, b) => (cache.obsBySp.get(b.id) || []).length - (cache.obsBySp.get(a.id) || []).length],
+  fotos_mais: ['Mais fotografias', (a, b) => (cache.phBySp.get(b.id) || []).length - (cache.phBySp.get(a.id) || []).length]
+};
+function speciesCard(sp) {
+  const nPh = (cache.phBySp.get(sp.id) || []).length, nOb = (cache.obsBySp.get(sp.id) || []).length;
+  const cover = sp.coverPhotoId ? '<a class="cover" href="#/especie/' + esc(sp.id) + '" tabindex="-1" aria-hidden="true">' + thumbImg(sp.coverPhotoId, 'Capa de ' + sp.commonName) + '</a>' : '<a class="cover" href="#/especie/' + esc(sp.id) + '" tabindex="-1" aria-hidden="true"><div class="pimg"><div class="ph"><span>🐾</span><small>Sem fotografia</small></div></div></a>';
+  return '<article class="card sp" data-id="' + esc(sp.id) + '">' + cover + '<div class="body"><h3><span>' + esc(sp.commonName) + '</span><button class="fav" type="button" data-fav="' + esc(sp.id) + '" aria-pressed="' + (sp.favorite ? 'true' : 'false') + '" aria-label="' + (sp.favorite ? 'Remover dos favoritos' : 'Marcar como favorita') + '">' + (sp.favorite ? '★' : '☆') + '</button></h3>' +
+    (sp.scientificName ? '<p class="sci" style="margin:0">' + esc(sp.scientificName) + '</p>' : '') + '<div><span class="badge">' + esc(sp.group) + '</span></div>' +
+    '<p class="counts">📷 ' + plural(nPh, 'foto', 'fotos') + ' · 👁 ' + plural(nOb, 'observação', 'observações') + '</p>' +
+    '<div class="actions"><a class="btn sm primary" href="#/especie/' + esc(sp.id) + '">Abrir ficha</a><a class="btn sm" href="#/especie/' + esc(sp.id) + '/editar">Editar</a></div></div></article>';
+}
+function viewCatalog(main) {
+  document.title = 'Catálogo — Compêndio de Animais';
+  const { species } = cache;
+  if (!species.length) { main.innerHTML = '<h1>Catálogo</h1><div class="card empty"><div class="big">🍃</div><p>Nenhuma espécie cadastrada ainda.</p><a class="btn primary" href="#/especie/nova">＋ Cadastrar espécie</a></div>'; return; }
+  // Texto pesquisável: ficha + local/ambiente/comportamento/anotações das observações
+  const hay = new Map(species.map(s => [s.id, norm([s.commonName, s.scientificName, s.family, s.genus, s.order, s.class, s.phylum, s.group, s.description, s.habitat, s.distribution, s.diet, s.behavior, s.reproduction, s.curiosities, s.notes]
+    .concat((cache.obsBySp.get(s.id) || []).map(o => [o.location, o.environment, o.behavior, o.notes].join(' '))).join(' '))]));
+  main.innerHTML = '<div class="section-title"><h1 style="margin:0">Catálogo</h1><a class="btn primary" href="#/especie/nova">＋ Cadastrar espécie</a></div>' +
+    '<div class="toolbar"><div><label for="q" class="small muted">Pesquisar</label><input type="search" id="q" placeholder="Nome, família, local, anotações…" value="' + esc(ui.q) + '"></div>' +
+    '<div><label for="fg" class="small muted">Grupo animal</label><select id="fg"><option value="">Todos os grupos</option>' + GROUPS.map(g => '<option' + (ui.group === g ? ' selected' : '') + '>' + esc(g) + '</option>').join('') + '</select></div>' +
+    '<div><label for="so" class="small muted">Ordenar por</label><select id="so">' + Object.keys(SORTS).map(k => '<option value="' + k + '"' + (ui.sort === k ? ' selected' : '') + '>' + SORTS[k][0] + '</option>').join('') + '</select></div></div>' +
+    '<div class="toolbar-2"><label class="chk"><input type="checkbox" id="ff"' + (ui.fav ? ' checked' : '') + '> Somente favoritas</label><span class="seg" role="group" aria-label="Formato de exibição"><button type="button" data-v="grid" aria-pressed="' + (ui.view === 'grid') + '">▦ Grade</button><button type="button" data-v="list" aria-pressed="' + (ui.view === 'list') + '">☰ Lista</button></span><span class="muted small" id="cnt" aria-live="polite"></span></div><div id="results"></div>';
+  const res = $('#results', main);
+  function paint() {
+    const terms = norm(ui.q).split(/\s+/).filter(Boolean);
+    const out = species.filter(s => (!ui.group || s.group === ui.group) && (!ui.fav || s.favorite) && terms.every(t => hay.get(s.id).includes(t))).sort(SORTS[ui.sort] ? SORTS[ui.sort][1] : SORTS.nome_az[1]);
+    $('#cnt', main).textContent = out.length + ' de ' + species.length + (species.length === 1 ? ' espécie' : ' espécies');
+    $$('.seg button', main).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === ui.view)));
+    clearThumbs();
+    if (!out.length) { res.innerHTML = '<div class="card empty"><div class="big">🔍</div><p>Nenhuma espécie encontrada com a pesquisa e os filtros atuais.</p><button class="btn" id="clr" type="button">Limpar pesquisa e filtros</button></div>'; $('#clr', res).onclick = () => { ui.q = ''; ui.group = ''; ui.fav = false; viewCatalog(main); hydrate(main); }; return; }
+    res.innerHTML = '<div class="' + (ui.view === 'list' ? 'sp-list' : 'sp-grid') + '">' + out.map(speciesCard).join('') + '</div>';
+    hydrate(res);
+  }
+  $('#q', main).addEventListener('input', e => { ui.q = e.target.value; paint(); });
+  $('#fg', main).addEventListener('change', e => { ui.group = e.target.value; paint(); });
+  $('#so', main).addEventListener('change', e => { ui.sort = e.target.value; lsSet('compendio-ordem', ui.sort); paint(); });
+  $('#ff', main).addEventListener('change', e => { ui.fav = e.target.checked; paint(); });
+  $$('.seg button', main).forEach(b => b.onclick = () => { ui.view = b.dataset.v; lsSet('compendio-vista', ui.view); paint(); });
+  res.addEventListener('click', async e => {
+    const f = e.target.closest('[data-fav]'); if (!f) return;
+    try { await dbToggleFav(f.dataset.fav); await loadAll(); paint(); } catch (err) { toast(explainError(err), 'err'); }
+  });
+  paint();
+}
+
+/* ---- Ficha da espécie ---- */
+function viewSpecies(main, id) {
+  const sp = cache.spById.get(id);
+  if (!sp) { main.innerHTML = '<div class="card empty"><p>Espécie não encontrada. Ela pode ter sido excluída.</p><a class="btn" href="#/catalogo">Voltar ao catálogo</a></div>'; return; }
+  document.title = sp.commonName + ' — Compêndio de Animais';
+  const phs = (cache.phBySp.get(id) || []).slice().sort((a, b) => a.createdAt < b.createdAt ? -1 : 1);
+  const obs = (cache.obsBySp.get(id) || []).slice().sort((a, b) => ((b.date || '') + b.createdAt).localeCompare((a.date || '') + a.createdAt));
+  const obById = new Map(obs.map(o => [o.id, o]));
+  const tax = TAXON.filter(([k]) => sp[k]);
+  const infos = INFO.filter(([k]) => sp[k]);
+  const galleryItem = p => '<button type="button" class="gitem" data-ph="' + esc(p.id) + '" aria-label="Ampliar fotografia' + (p.caption ? ': ' + esc(p.caption) : '') + '"><div style="position:relative">' + thumbImg(p.id, p.caption || p.fileName || 'Fotografia') + (sp.coverPhotoId === p.id ? '<span class="cover-tag">Capa</span>' : '') + '</div><small>' + esc(p.caption || '') + (p.observationId && obById.has(p.observationId) ? (p.caption ? ' · ' : '') + 'obs. ' + esc(fmtDay(obById.get(p.observationId).date)) : '') + '</small></button>';
+  main.innerHTML = '<p class="small"><a href="#/catalogo">← Catálogo</a></p>' +
+    '<div class="sheet-head"><div>' + (sp.coverPhotoId ? '<button type="button" class="gitem" style="width:100%;border-radius:14px" data-ph="' + esc(sp.coverPhotoId) + '" aria-label="Ampliar fotografia de capa">' + thumbImg(sp.coverPhotoId, 'Capa de ' + sp.commonName) + '</button>' : '<div class="pimg" style="border-radius:14px"><div class="ph"><span>🐾</span><small>Sem fotografia de capa</small></div></div>') + '</div>' +
+    '<div><div class="row between" style="align-items:flex-start"><h1 style="margin:0">' + esc(sp.commonName) + '</h1><button class="fav" id="favBtn" type="button" aria-pressed="' + (sp.favorite ? 'true' : 'false') + '" aria-label="' + (sp.favorite ? 'Remover dos favoritos' : 'Marcar como favorita') + '">' + (sp.favorite ? '★' : '☆') + '</button></div>' +
+    (sp.scientificName ? '<p class="sci" style="font-size:1.15rem;margin:.1em 0 .5em">' + esc(sp.scientificName) + '</p>' : '') +
+    '<p><span class="badge">' + esc(sp.group) + '</span> ' + (sp.certainty ? '<span class="badge alt">Identificação: ' + esc(CERTAINTY[sp.certainty]) + '</span>' : '') + '</p>' +
+    (tax.length ? '<dl class="tax">' + tax.map(([k, l]) => '<dt>' + l + '</dt><dd>' + esc(sp[k]) + '</dd>').join('') + '</dl>' : '') +
+    '<p class="muted small">Cadastrada em ' + esc(fmtStamp(sp.createdAt)) + ' · atualizada em ' + esc(fmtStamp(sp.updatedAt)) + '</p>' +
+    '<div class="row"><a class="btn primary" href="#/observacao/nova/' + esc(id) + '">✎ Registrar observação</a><a class="btn" href="#/especie/' + esc(id) + '/editar">Editar ficha</a><button class="btn danger" id="delSp" type="button">Excluir espécie</button></div></div></div>' +
+    (infos.length ? '<div class="section-title"><h2>Sobre a espécie</h2></div><div class="info-grid">' + infos.map(([k, l]) => '<div class="card flat"><h3>' + l + '</h3><div class="pre">' + esc(sp[k]) + '</div></div>').join('') + '</div>' : '') +
+    '<div class="section-title"><h2>Galeria (' + phs.length + ')</h2><span><label class="btn sm" for="quickAdd" style="margin:0">＋ Adicionar fotografias</label><input id="quickAdd" type="file" accept="image/*" multiple hidden></span></div>' +
+    (phs.length ? '<div class="gallery">' + phs.map(galleryItem).join('') + '</div>' : '<div class="card empty">Nenhuma fotografia ainda. Use “Adicionar fotografias”.</div>') +
+    '<div class="section-title"><h2>Observações (' + obs.length + ')</h2><a class="btn sm primary" href="#/observacao/nova/' + esc(id) + '">＋ Nova observação</a></div>' +
+    (obs.length ? obs.map(o => { const op = phs.filter(p => p.observationId === o.id);
+      return '<article class="card obs"><div class="row between"><h3 style="margin:0">' + esc(fmtDay(o.date)) + '</h3><span class="row"><a class="btn sm" href="#/observacao/' + esc(o.id) + '/editar">Editar</a><button class="btn sm danger" type="button" data-delobs="' + esc(o.id) + '">Excluir</button></span></div>' +
+        (o.location ? '<p style="margin:.4em 0 0">📍 ' + esc(o.location) + (o.environment ? ' <span class="muted">· ' + esc(o.environment) + '</span>' : '') + '</p>' : (o.environment ? '<p class="muted" style="margin:.4em 0 0">' + esc(o.environment) + '</p>' : '')) +
+        (o.behavior ? '<p style="margin:.6em 0 0"><b>Comportamento:</b> <span class="pre">' + esc(o.behavior) + '</span></p>' : '') + (o.notes ? '<p style="margin:.6em 0 0"><b>Anotações:</b> <span class="pre">' + esc(o.notes) + '</span></p>' : '') +
+        (op.length ? '<div class="thumbs">' + op.map(p => '<button type="button" class="gitem" data-ph="' + esc(p.id) + '" aria-label="Ampliar fotografia">' + thumbImg(p.id, p.caption || 'Fotografia da observação') + '</button>').join('') + '</div>' : '') + '</article>'; }).join('')
+      : '<div class="card empty">Nenhuma observação registrada para esta espécie.</div>');
+
+  main.addEventListener('click', async e => {
+    const ph = e.target.closest('[data-ph]'); if (ph) return openViewer(id, ph.dataset.ph);
+    const dob = e.target.closest('[data-delobs]');
+    if (dob) {
+      const o = obById.get(dob.dataset.delobs); const n = phs.filter(p => p.observationId === o.id).length;
+      if (!await confirmDialog({ title: 'Excluir observação', message: '<p>A observação de <b>' + esc(fmtDay(o.date)) + '</b> será excluída permanentemente' + (n ? ', junto com ' + plural(n, 'fotografia vinculada', 'fotografias vinculadas') + ' a ela' : '') + '.</p><p>Esta ação não pode ser desfeita.</p>', confirmText: 'Excluir observação', danger: true })) return;
+      try { await dbDeleteObservation(o.id); toast('Observação excluída.'); await loadAll(); refreshView(); } catch (err) { toast(explainError(err), 'err'); }
+    }
+  });
+  $('#favBtn', main).onclick = async () => { try { await dbToggleFav(id); await loadAll(); refreshView(); } catch (e) { toast(explainError(e), 'err'); } };
+  $('#delSp', main).onclick = async () => {
+    const nO = obs.length, nP = phs.length;
+    if (!await confirmDialog({ title: 'Excluir espécie', message: '<p>A espécie <b>' + esc(sp.commonName) + '</b> será excluída permanentemente.</p><p><b>Também serão excluídas ' + plural(nO, 'observação vinculada', 'observações vinculadas') + ' e ' + plural(nP, 'fotografia', 'fotografias') + '</b> (originais e miniaturas).</p><p>Se não houver um backup, não será possível recuperar.</p>', confirmText: 'Excluir espécie e vínculos', danger: true })) return;
+    try { await dbDeleteSpecies(id); toast('Espécie excluída.'); location.hash = '#/catalogo'; } catch (e) { toast(explainError(e), 'err'); }
+  };
+  $('#quickAdd', main).addEventListener('change', async e => {
+    const items = await ingestFiles(e.target.files); e.target.value = ''; if (!items.length) return;
+    showBusy('Salvando fotografias…');
+    try { await dbAddPhotos(id, await recordsFromItems(items, id, null)); hideBusy(); toast(plural(items.length, 'fotografia adicionada', 'fotografias adicionadas') + '.'); await loadAll(); refreshView(); }
+    catch (err) { hideBusy(); toast(explainError(err), 'err'); }
+  });
+}
+
+/* ---- Formulário de espécie ---- */
+function viewSpeciesForm(main, id) {
+  const sp = id ? cache.spById.get(id) : null;
+  if (id && !sp) { main.innerHTML = '<div class="card empty"><p>Espécie não encontrada.</p><a class="btn" href="#/catalogo">Voltar</a></div>'; return; }
+  const v = k => sp ? (sp[k] || '') : '';
+  document.title = (sp ? 'Editar ' + sp.commonName : 'Nova espécie') + ' — Compêndio de Animais';
+  const T = (k, label, ph) => '<div class="field"><label for="f_' + k + '">' + label + '</label><input type="text" id="f_' + k + '" name="' + k + '" maxlength="300" placeholder="' + esc(ph || '') + '" value="' + esc(v(k)) + '"></div>';
+  const A = (k, label) => '<div class="field"><label for="f_' + k + '">' + label + '</label><textarea id="f_' + k + '" name="' + k + '" maxlength="20000">' + esc(v(k)) + '</textarea></div>';
+  main.innerHTML = '<p class="small"><a href="' + (sp ? '#/especie/' + esc(id) : '#/catalogo') + '">← Cancelar</a></p><h1>' + (sp ? 'Editar espécie' : 'Cadastrar espécie') + '</h1>' +
+    '<form id="spForm" novalidate><div class="card"><h2>Identificação</h2>' +
+    '<div class="field"><label for="f_commonName">Nome popular <span class="req">*</span></label><input type="text" id="f_commonName" name="commonName" maxlength="300" required value="' + esc(v('commonName')) + '"><div class="err-msg" id="errName" hidden>Informe o nome popular.</div></div>' +
+    '<div class="grid2">' + T('scientificName', 'Nome científico', 'Opcional') +
+    '<div class="field"><label for="f_group">Grupo animal</label><select id="f_group" name="group">' + GROUPS.map(g => '<option' + ((sp ? sp.group : 'Não identificado') === g ? ' selected' : '') + '>' + esc(g) + '</option>').join('') + '</select></div>' +
+    '<div class="field"><label for="f_certainty">Grau de certeza da identificação</label><select id="f_certainty" name="certainty">' + Object.keys(CERTAINTY).map(k => '<option value="' + k + '"' + (v('certainty') === k ? ' selected' : '') + '>' + CERTAINTY[k] + '</option>').join('') + '</select></div></div>' +
+    '<p class="hint">A classificação científica é opcional: você pode registrar um animal ainda não identificado.</p>' +
+    '<div class="grid2" style="margin-top:12px">' + TAXON.map(([k, l]) => T(k, l)).join('') + '</div></div>' +
+    '<div class="card"><h2>Informações sobre a espécie</h2><p class="hint" style="margin-bottom:12px">Todos os campos são opcionais.</p>' + INFO.map(([k, l]) => A(k, l)).join('') + '</div>' +
+    '<div class="card"><h2>Fotografias</h2><div id="phEd"></div></div>' +
+    '<div class="row"><button class="btn primary" type="submit" id="saveBtn">' + (sp ? 'Salvar alterações' : 'Salvar espécie') + '</button><a class="btn" href="' + (sp ? '#/especie/' + esc(id) : '#/catalogo') + '">Cancelar</a></div></form>';
+  const existing = sp ? (cache.phBySp.get(id) || []).filter(p => !p.observationId).sort((a, b) => a.createdAt < b.createdAt ? -1 : 1) : [];
+  const ed = photoEditor($('#phEd', main), { existing, coverId: sp ? sp.coverPhotoId : null, allowCover: true });
+  $('#spForm', main).addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target, name = f.commonName.value.trim();
+    $('#errName', main).hidden = !!name;
+    if (!name) { f.commonName.focus(); return; }
+    const t = iso(), rec = sp ? Object.assign({}, sp) : { id: uid(), favorite: false, coverPhotoId: null, createdAt: t };
+    SP_TEXT.forEach(k => { rec[k] = f[k].value.trim(); });
+    rec.group = f.group.value; rec.certainty = f.certainty.value; rec.updatedAt = t;
+    const ch = editorChanges(ed);
+    rec.coverPhotoId = (ed.coverId && !ch.removeIds.includes(ed.coverId)) ? ed.coverId : (sp && sp.coverPhotoId && !ch.removeIds.includes(sp.coverPhotoId) ? sp.coverPhotoId : null);
+    $('#saveBtn', main).disabled = true; showBusy('Salvando…');
+    try {
+      const recs = await recordsFromItems(ch.newItems, rec.id, null);
+      await dbSaveSpecies(rec, ch.removeIds, ch.captionUpdates, recs);
+      hideBusy(); toast('Espécie salva com sucesso.'); location.hash = '#/especie/' + rec.id;
+    } catch (err) { hideBusy(); $('#saveBtn', main).disabled = false; toast(explainError(err), 'err'); }
+  });
+}
+
+/* ---- Formulário de observação ---- */
+function viewObsForm(main, obsId, presetSp) {
+  const ob = obsId ? cache.observations.find(o => o.id === obsId) : null;
+  if (obsId && !ob) { main.innerHTML = '<div class="card empty"><p>Observação não encontrada.</p><a class="btn" href="#/catalogo">Voltar</a></div>'; return; }
+  if (!cache.species.length) { toast('Cadastre uma espécie antes de registrar observações.', 'err'); location.hash = '#/especie/nova'; return; }
+  const spId = ob ? ob.speciesId : (presetSp && cache.spById.has(presetSp) ? presetSp : '');
+  const v = k => ob ? (ob[k] || '') : '';
+  document.title = (ob ? 'Editar observação' : 'Nova observação') + ' — Compêndio de Animais';
+  const back = spId ? '#/especie/' + esc(spId) : '#/';
+  const spOptions = cache.species.slice().sort(SORTS.nome_az[1]).map(s => '<option value="' + esc(s.id) + '"' + (s.id === spId ? ' selected' : '') + '>' + esc(s.commonName) + (s.scientificName ? ' (' + esc(s.scientificName) + ')' : '') + '</option>').join('');
+  main.innerHTML = '<p class="small"><a href="' + back + '">← Cancelar</a></p><h1>' + (ob ? 'Editar observação' : 'Registrar observação') + '</h1>' +
+    '<form id="obForm" novalidate><div class="card"><div class="field"><label for="o_sp">Espécie <span class="req">*</span></label>' +
+    (ob ? '<input type="text" id="o_sp" value="' + esc(spName(spId)) + '" disabled>' : '<select id="o_sp" name="speciesId"><option value="">Selecione…</option>' + spOptions + '</select><div class="err-msg" id="errSp" hidden>Selecione a espécie observada.</div>') + '</div>' +
+    '<div class="grid2"><div class="field"><label for="o_date">Data <span class="req">*</span></label><input type="date" id="o_date" name="date" required value="' + esc(ob ? ob.date : todayLocal()) + '"><div class="err-msg" id="errDate" hidden>Informe a data da observação.</div></div>' +
+    '<div class="field"><label for="o_env">Tipo de ambiente (opcional)</label><input type="text" id="o_env" name="environment" list="envList" maxlength="300" value="' + esc(v('environment')) + '"><datalist id="envList">' + ENVIRONMENTS.map(x => '<option value="' + esc(x) + '">').join('') + '</datalist></div></div>' +
+    '<div class="field"><label for="o_loc">Local</label><input type="text" id="o_loc" name="location" maxlength="500" placeholder="Digite o local manualmente (cidade, parque, trilha…)" value="' + esc(v('location')) + '"><p class="hint">O aplicativo não usa GPS: o local é sempre preenchido por você.</p></div>' +
+    '<div class="field"><label for="o_beh">Comportamento observado</label><textarea id="o_beh" name="behavior" maxlength="20000">' + esc(v('behavior')) + '</textarea></div>' +
+    '<div class="field"><label for="o_not">Anotações pessoais</label><textarea id="o_not" name="notes" maxlength="20000">' + esc(v('notes')) + '</textarea></div></div>' +
+    '<div class="card"><h2>Fotografias deste encontro</h2><div id="phEd"></div></div>' +
+    '<div class="row"><button class="btn primary" type="submit" id="saveBtn">' + (ob ? 'Salvar alterações' : 'Salvar observação') + '</button><a class="btn" href="' + back + '">Cancelar</a>' + (ob ? '<button class="btn danger" type="button" id="delOb">Excluir observação</button>' : '') + '</div></form>';
+  const existing = ob ? (cache.phBySp.get(ob.speciesId) || []).filter(p => p.observationId === ob.id) : [];
+  const ed = photoEditor($('#phEd', main), { existing, allowCover: false });
+  $('#obForm', main).addEventListener('submit', async e => {
+    e.preventDefault(); const f = e.target;
+    const sid = ob ? ob.speciesId : f.speciesId.value; const date = f.date.value;
+    let bad = false;
+    if (!sid) { $('#errSp', main).hidden = false; bad = true; } else if (!ob) $('#errSp', main).hidden = true;
+    $('#errDate', main).hidden = !!date; if (!date) bad = true;
+    if (bad) return;
+    const t = iso();
+    const rec = { id: ob ? ob.id : uid(), speciesId: sid, date, location: f.location.value.trim(), environment: f.environment.value.trim(), behavior: f.behavior.value.trim(), notes: f.notes.value.trim(), createdAt: ob ? ob.createdAt : t, updatedAt: t };
+    const ch = editorChanges(ed);
+    $('#saveBtn', main).disabled = true; showBusy('Salvando…');
+    try {
+      const recs = await recordsFromItems(ch.newItems, sid, rec.id);
+      await dbSaveObservation(rec, ch.removeIds, ch.captionUpdates, recs);
+      hideBusy(); toast('Observação salva com sucesso.'); location.hash = '#/especie/' + sid;
+    } catch (err) { hideBusy(); $('#saveBtn', main).disabled = false; toast(explainError(err), 'err'); }
+  });
+  if (ob) $('#delOb', main).onclick = async () => {
+    const n = existing.length;
+    if (!await confirmDialog({ title: 'Excluir observação', message: '<p>A observação de <b>' + esc(fmtDay(ob.date)) + '</b> será excluída permanentemente' + (n ? ', junto com ' + plural(n, 'fotografia vinculada', 'fotografias vinculadas') : '') + '.</p>', confirmText: 'Excluir observação', danger: true })) return;
+    try { await dbDeleteObservation(ob.id); toast('Observação excluída.'); location.hash = '#/especie/' + ob.speciesId; } catch (e) { toast(explainError(e), 'err'); }
+  };
+}
+
+/* ---- Backup e restauração ---- */
+function viewBackup(main) {
+  document.title = 'Backup — Compêndio de Animais';
+  const photos = cache.photos, est = Math.round(photos.reduce((a, p) => a + (p.size || 0) + (p.thumbSize || 0), 0) * 4 / 3) + 20000;
+  const st = backupStatus();
+  main.innerHTML = '<h1>Backup e restauração</h1>' + (st ? '<div class="banner ' + st.cls + '">' + esc(st.text) + '</div>' : '') +
+    '<div class="card"><h2>Fazer backup</h2><p>Gera um arquivo <b>.json</b> com todas as espécies, observações, campos preenchidos, <b>fotografias originais</b> e miniaturas, para recuperar a coleção neste ou em outro dispositivo.</p>' +
+    '<p class="muted small">Como as fotografias originais são incluídas, o arquivo pode ficar grande. Tamanho estimado deste backup: <b>~' + esc(fmtBytes(est)) + '</b>. Guarde-o em um local seguro (outra pasta, cartão, nuvem pessoal ou computador). O aplicativo não consegue confirmar que o arquivo foi salvo — confira o download.</p>' +
+    '<button class="btn primary" id="doBackup" type="button"' + (cache.species.length ? '' : ' disabled') + '>⇩ Fazer backup</button>' + (cache.species.length ? '' : ' <span class="muted small">Não há dados para salvar ainda.</span>') + '</div>' +
+    '<div class="card"><h2>Restaurar backup</h2><p>Selecione um arquivo de backup do Compêndio. O arquivo é verificado por completo <b>antes</b> de qualquer alteração. <b>A restauração substitui toda a coleção atual</b> e é feita em uma única operação: se algo falhar, a coleção atual permanece intacta.</p>' +
+    '<label class="btn" for="restoreFile" style="margin:0">Escolher arquivo de backup…</label><input id="restoreFile" type="file" accept=".json,application/json" hidden><p class="hint">Backups muito grandes dependem da memória do dispositivo para serem lidos.</p></div>' +
+    '<div class="card"><h2>Sobre o armazenamento</h2><ul style="padding-left:1.2em;margin:0 0 .6em"><li>Os dados ficam <b>somente neste navegador</b>, neste dispositivo. Não há sincronização entre dispositivos e nada é enviado a servidores.</li><li>Apagar os dados do site, limpar o navegador ou desinstalar o aplicativo pode apagar a coleção.</li><li>Arquivos HTML abertos diretamente (file://) podem ter comportamento diferente entre navegadores; se possível, use sempre o mesmo navegador e o mesmo local do arquivo.</li><li>Faça backups periódicos.</li></ul><p class="small" id="storInfo">Consultando o navegador…</p></div>';
+  const stor = $('#storInfo', main);
+  (async () => {
+    const out = [];
+    try {
+      if (navigator.storage && navigator.storage.persisted) out.push('Armazenamento persistente: ' + ((await navigator.storage.persisted()) ? 'concedido pelo navegador' : 'não concedido (o navegador pode apagar os dados em situações de pouco espaço)'));
+      else out.push('Armazenamento persistente: recurso indisponível neste navegador');
+      if (navigator.storage && navigator.storage.estimate) { const e = await navigator.storage.estimate(); if (e && e.quota) out.push('Uso estimado pelo navegador: ' + fmtBytes(e.usage || 0) + ' de ' + fmtBytes(e.quota) + ' disponíveis'); }
+    } catch (e) { out.push('Não foi possível consultar o armazenamento do navegador.'); }
+    stor.textContent = out.join(' · ');
+  })();
+  $('#doBackup', main).onclick = async () => {
+    try {
+      const r = await exportBackup();
+      modal('<h2>Backup gerado</h2><p>Arquivo: <b>' + esc(r.name) + '</b> (' + esc(fmtBytes(r.size)) + ').</p><p>O download foi iniciado. Verifique na pasta de downloads do seu dispositivo se o arquivo foi salvo e guarde-o em um local seguro. Ele contém suas fotografias originais, por isso pode ser grande.</p><div class="row end"><button class="btn primary" type="button" id="okb">Entendi</button></div>').el.querySelector('#okb').onclick = e => e.target.closest('.backdrop')._close();
+      refreshView();
+    } catch (e) { toast('Não foi possível gerar o backup: ' + (e.message || explainError(e)), 'err'); }
+  };
+  $('#restoreFile', main).addEventListener('change', async e => {
+    const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+    showBusy('Lendo e verificando o arquivo…');
+    let data;
+    try {
+      const text = await file.text(); let obj;
+      try { obj = JSON.parse(text); } catch (x) { throw new Error('O arquivo não é um JSON válido.'); }
+      data = validateBackup(obj);
+    } catch (err) { hideBusy(); toast('Backup rejeitado: ' + err.message + ' Nada foi alterado.', 'err'); return; }
+    hideBusy();
+    askRestore(data, file.name);
+  });
+}
+function askRestore(data, fname) {
+  const hasCurrent = cache.species.length > 0;
+  const m = modal('<h2>Restaurar backup?</h2><p>Arquivo verificado: <b>' + esc(fname) + '</b></p><ul><li>' + plural(data.species.length, 'espécie', 'espécies') + '</li><li>' + plural(data.observations.length, 'observação', 'observações') + '</li><li>' + plural(data.photos.length, 'fotografia', 'fotografias') + '</li>' + (data.exportedAt ? '<li>Gerado em ' + esc(fmtStamp(data.exportedAt)) + '</li>' : '') + '</ul>' +
+    (data.warnings.length ? '<div class="banner warn small">' + data.warnings.map(esc).join('<br>') + '</div>' : '') +
+    '<div class="banner err"><b>A restauração substituirá toda a coleção atual</b> (' + plural(cache.species.length, 'espécie', 'espécies') + ', ' + plural(cache.photos.length, 'fotografia', 'fotografias') + ').' + (hasCurrent ? ' Recomendamos fazer um backup dos dados atuais antes.' : '') + '</div>' +
+    '<div class="row end">' + (hasCurrent ? '<button class="btn" type="button" id="rBk">Fazer backup do atual antes</button>' : '') + '<button class="btn" type="button" id="rNo">Cancelar</button><button class="btn danger" type="button" id="rGo">Substituir coleção atual</button></div>');
+  $('#rNo', m.el).onclick = () => m.close();
+  if (hasCurrent) $('#rBk', m.el).onclick = async e => {
+    e.target.disabled = true;
+    try { const r = await exportBackup(); e.target.textContent = 'Backup feito ✓ (' + r.name + ')'; } catch (x) { e.target.disabled = false; toast('Não foi possível gerar o backup: ' + (x.message || explainError(x)), 'err'); }
+  };
+  $('#rGo', m.el).onclick = async () => {
+    m.close(); showBusy('Restaurando coleção…');
+    try { await restoreData(data); await loadAll(); hideBusy(); toast('Restauração concluída: ' + plural(data.species.length, 'espécie', 'espécies') + ', ' + plural(data.photos.length, 'fotografia', 'fotografias') + '.'); location.hash = '#/'; refreshView(); }
+    catch (err) { hideBusy(); toast('A restauração falhou e a coleção anterior foi mantida. ' + explainError(err), 'err'); }
+  };
+}
+
+/* ---- Falha ao abrir o armazenamento ---- */
+function viewDbError(main) {
+  main.innerHTML = '<div class="card"><h1>Armazenamento indisponível</h1><div class="banner err">Não foi possível abrir o banco de dados local: ' + esc((dbError && dbError.message) || 'erro desconhecido') + '</div>' +
+    '<p>Sem esse armazenamento o Compêndio não consegue salvar espécies nem fotografias. Possíveis causas e soluções:</p><ul><li>Janela anônima/privada ou configurações que bloqueiam dados do site — use uma janela normal.</li><li>Alguns navegadores restringem o armazenamento em arquivos abertos diretamente (file://) — tente Chrome, Edge ou Firefox atualizados.</li><li>Espaço do dispositivo esgotado — libere espaço e recarregue a página.</li><li>Outra aba do Compêndio com versão diferente aberta — feche-a e recarregue.</li></ul><button class="btn primary" type="button" onclick="location.reload()">Tentar novamente</button></div>';
+}
+
+/* ==========================================================
+   Roteador (hash) — funciona em file:// sem servidor
+   ========================================================== */
+let token = 0;
+function route() { return location.hash.replace(/^#\/?/, '').split('?')[0].split('/').filter(Boolean).map(decodeURIComponent); }
+async function render(keepScroll) {
+  const my = ++token, y = keepScroll ? window.scrollY : 0;
+  // Substitui o <main> por um clone vazio para descartar ouvintes de eventos da tela anterior
+  const oldMain = $('#main'), main = oldMain.cloneNode(false); oldMain.replaceWith(main);
+  clearThumbs();
+  const r = route();
+  $$('#nav a').forEach(a => a.removeAttribute('aria-current'));
+  const nav = !r.length ? 'home' : (r[0] === 'backup' ? 'backup' : (r[0] === 'catalogo' || r[0] === 'especie' || r[0] === 'observacao') ? 'catalogo' : '');
+  const na = $('#nav a[data-nav="' + nav + '"]'); if (na) na.setAttribute('aria-current', 'page');
+  try {
+    if (dbError) { viewDbError(main); return; }
+    await loadAll(); if (my !== token) return;
+    const [a, b, c] = r;
+    if (!a) viewHome(main);
+    else if (a === 'catalogo') viewCatalog(main);
+    else if (a === 'especie' && b === 'nova') viewSpeciesForm(main, null);
+    else if (a === 'especie' && c === 'editar') viewSpeciesForm(main, b);
+    else if (a === 'especie' && b) viewSpecies(main, b);
+    else if (a === 'observacao' && b === 'nova') viewObsForm(main, null, c);
+    else if (a === 'observacao' && c === 'editar') viewObsForm(main, b, null);
+    else if (a === 'backup') viewBackup(main);
+    else main.innerHTML = '<div class="card empty"><p>Página não encontrada.</p><a class="btn" href="#/">Ir ao início</a></div>';
+    hydrate(main);
+  } catch (e) {
+    main.innerHTML = '<div class="card"><div class="banner err">' + esc(explainError(e)) + '</div><a class="btn" href="#/">Ir ao início</a></div>';
+  }
+  window.scrollTo(0, y);
+}
+// Redesenha a tela atual (após alterações), preservando a rolagem e janelas abertas
+function refreshView() { render(true); }
+
+/* ==========================================================
+   Inicialização
+   ========================================================== */
+async function init() {
+  applyTheme();
+  $('#themeBtn').addEventListener('click', toggleTheme);
+  window.addEventListener('hashchange', () => { closeOverlays(); render(false); });
+  try {
+    db = await openDB();
+    db.onversionchange = () => { db.close(); toast('O banco foi atualizado em outra aba. Recarregue a página.', 'err'); };
+    // Pede ao navegador que não apague os dados automaticamente (sem garantias)
+    if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+  } catch (e) { dbError = e; }
+  render(false);
+}
+init();
+})();
+</script>
+</body>
+</html>
